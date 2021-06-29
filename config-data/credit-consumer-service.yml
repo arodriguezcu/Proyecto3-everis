@@ -1,0 +1,49 @@
+server:
+  port: 8097
+  
+spring:
+  application:
+    name: credit-consumer-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/credit
+      
+topic:
+  name: credit-consumer-topic
+  partitions: 1
+  replicas: 1
+
+kafka:
+  uri: localhost:9092
+  
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8761/eureka
+            
+msg:
+    error:
+        registro:
+            notfound: ID DE CONSUMO NO ENCONTRADO
+            notfound.update: ID DE CONSUMO NO ENCONTRADO PARA ACTUALIZAR
+            
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 2s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.util.concurrent.TimeoutException
+          - java.io.IOException
+          - java.net.ConnectException
+    instances:
+      creditConsumerServiceCircuitBreaker:
+        baseConfig: default

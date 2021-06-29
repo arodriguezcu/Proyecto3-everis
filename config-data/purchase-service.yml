@@ -1,0 +1,49 @@
+server:
+  port: 8092
+  
+spring:
+  application:
+    name: purchase-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/purchase
+      
+topic:
+  name: purchase-topic
+  partitions: 1
+  replicas: 1
+
+kafka:
+  uri: localhost:9092
+  
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8761/eureka
+            
+msg:
+    error:
+        registro:
+            notfound: PURCHASE NO IDENTIFICADO
+            notfound.update: PURCHASE NO IDENTIFICADO PARA ACTUALIZAR
+            
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 2s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.util.concurrent.TimeoutException
+          - java.io.IOException
+          - java.net.ConnectException
+    instances:
+      purchaseServiceCircuitBreaker:
+        baseConfig: default

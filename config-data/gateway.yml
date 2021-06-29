@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: customer-service
+        uri: http://localhost:8090/
+        predicates:
+        - Path=/customer/**
+      - id: product-service
+        uri: http://localhost:8091/
+        predicates:
+        - Path=/product/**
+      - id: purchase-service
+        uri: http://localhost:8092/
+        predicates:
+        - Path=/purchase/**
+      - id: transaction-service
+        uri: http://localhost:8093/
+        predicates:
+        - Path=/transaction/**
+      - id: account-service
+        uri: http://localhost:8094/
+        predicates:
+        - Path=/account/**
+      - id: withdrawal-service
+        uri: http://localhost:8095/
+        predicates:
+        - Path=/withdrawal/**
+      - id: deposit-service
+        uri: http://localhost:8096/
+        predicates:
+        - Path=/deposit/**
+      - id: credit-service
+        uri: http://localhost:8097/
+        predicates:
+        - Path=/credit/**
+      - id: payment-service
+        uri: http://localhost:8098/
+        predicates:
+        - Path=/payment/**
