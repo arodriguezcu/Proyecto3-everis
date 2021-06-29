@@ -9,16 +9,17 @@ spring:
       uri: mongodb://localhost:27017/customer
 
 eureka:
-    client:
-        service-url:
-            defaultZone: http://localhost:8761/eureka
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
 msg:
-    error:
-        registro:
-            notfound: CLIENTE NO IDENTIFICADO
-            notfound.update: CLIENTE NO IDENTIFICADO PARA ACTUALIZAR
-            notfound.delete: CLIENTE NO IDENTIFICADO PARA ELIMINAR
+  error:
+    registro:      
+      notfound: CLIENTE NO IDENTIFICADO
+      notfound.update: CLIENTE NO IDENTIFICADO PARA ACTUALIZAR
+      notfound.delete: CLIENTE NO IDENTIFICADO PARA ELIMINAR
+      customer.delete: CLIENTE ELIMINADO
 
 resilience4j:
   circuitbreaker:
