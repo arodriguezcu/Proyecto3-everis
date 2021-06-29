@@ -18,6 +18,7 @@ msg:
         registro:
             notfound: CLIENTE NO IDENTIFICADO
             notfound.update: CLIENTE NO IDENTIFICADO PARA ACTUALIZAR
+            notfound.delete: CLIENTE NO IDENTIFICADO PARA ELIMINAR
 
 resilience4j:
   circuitbreaker:
