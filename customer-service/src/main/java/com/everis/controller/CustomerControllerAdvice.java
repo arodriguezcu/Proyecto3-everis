@@ -18,7 +18,7 @@ public class CustomerControllerAdvice {
   @ExceptionHandler(RuntimeException.class)
   public Mono<ResponseEntity<String>> exceptionHandler(RuntimeException ex) {
   
-    log.info("ups ocurrio un error : ", ex.getMessage());
+    log.info("Error : ", ex.getMessage());
     
     return Mono.defer(() -> Mono
         .just(ResponseEntity

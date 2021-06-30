@@ -3,7 +3,6 @@ package com.everis.controller;
 import com.everis.dto.Response;
 import com.everis.model.Customer;
 import com.everis.service.InterfaceCustomerService;
-import com.everis.topic.producer.CustomerProducer;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -29,10 +27,7 @@ public class CustomerController {
   
   @Autowired
   private InterfaceCustomerService service;
-  
-  @Autowired
-  private CustomerProducer producer;
-  
+    
   /** Listado de clientes. */
   @GetMapping
   public Mono<ResponseEntity<List<Customer>>> findAll() { 
@@ -71,42 +66,14 @@ public class CustomerController {
   
   /** Crear cliente. */
   @PostMapping
-  public Mono<ResponseEntity<Response>> create(@RequestBody 
+  public Mono<ResponseEntity<Customer>> create(@RequestBody 
       Customer customer, final ServerHttpRequest request) {
     
-    Flux<Customer> customerDatabase = service.findAll()
-        .filter(list -> list.getIdentityNumber().equals(customer.getIdentityNumber()));
-  
-    return customerDatabase
-        .collectList()
-        .flatMap(list -> {
-          
-          if (list.size() > 0) {
-            return Mono.just(ResponseEntity
-                .badRequest()
-                .body(Response
-                    .builder()
-                    .data("El cliente con numero de identificacion " 
-                        + customer.getIdentityNumber() + " ya existe")
-                    .build()));      
-          }
-          
-          return service.create(customer)
-              .map(createdObject -> {
-                
-                producer.sendSavedCustomerTopic(createdObject);
-                
-                return ResponseEntity
-                    .ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(Response
-                        .builder()
-                        .data(createdObject)
-                        .build());
-        
-              });
-    
-        });
+    return service.createCustomer(customer)
+        .map(objectFound -> ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(objectFound));
     
   }
   
@@ -127,27 +94,6 @@ public class CustomerController {
   @DeleteMapping("/{indentityNumber}")
   public Mono<ResponseEntity<Response>> delete(@PathVariable("indentityNumber") 
       String indentityNumber) {
-  
-//    return service.findByIdentityNumber(indentityNumber)
-//      .flatMap(objectDelete -> {
-//        
-//        return service.delete(objectDelete.getId())
-//            .then(Mono.just(ResponseEntity
-//                .ok()
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(Response
-//                    .builder()
-//                    .data("El cliente con numero de identificacion " 
-//                        + indentityNumber + " ha sido eliminado")
-//                    .build())));
-//        
-//      })
-//      .defaultIfEmpty(ResponseEntity
-//          .badRequest()
-//          .body(Response
-//              .builder()
-//              .data("El cliente no existe")
-//              .build()));
     
     return service.deleteCustomer(indentityNumber)
         .map(objectFound -> ResponseEntity
@@ -155,6 +101,6 @@ public class CustomerController {
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
     
-    }
+  }
   
 }

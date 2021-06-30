@@ -12,11 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Slf4j : Logback.
+ * Clase Service que implementa el crud y otros metodos adicionales.
  */
 @Slf4j
 @Service
@@ -28,11 +28,20 @@ public class CustomerService extends CrudServiceImpl<Customer, String>
   @Value("${msg.error.registro.notfound}")
   private String msgNotFound;
   
+  @Value("${msg.error.registro.if.exists}")
+  private String msgIfExists;
+  
+  @Value("${msg.error.registro.notfound.create}")
+  private String msgNotFoundCreate;  
+  
   @Value("${msg.error.registro.notfound.update}")
   private String msgNotFoundUpdate;
   
   @Value("${msg.error.registro.notfound.delete}")
   private String msgNotFoundDelete;
+
+  @Value("${msg.error.registro.customer.delete}")
+  private String msgCustomerDelete;
   
   @Autowired
   private InterfaceCustomerRepository repository;
@@ -60,7 +69,37 @@ public class CustomerService extends CrudServiceImpl<Customer, String>
   }
   
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "updateCustomerFallback")
+  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "createFallback")
+  public Mono<Customer> createCustomer(Customer customer) {
+    
+    Flux<Customer> customerDatabase = service.findAll()
+        .filter(list -> list.getIdentityNumber().equals(customer.getIdentityNumber()));
+  
+    return customerDatabase
+        .collectList()
+        .flatMap(list -> {
+          
+          if (list.size() > 0) {
+            
+            return Mono.error(new RuntimeException(msgIfExists));
+            
+          }
+          
+          return service.create(customer)
+              .map(createdObject -> {
+                
+                producer.sendSavedCustomerTopic(createdObject);                
+                return createdObject;
+                
+              })
+              .switchIfEmpty(Mono.error(new RuntimeException(msgNotFoundCreate)));
+    
+        });
+    
+  }
+  
+  @Override
+  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "updateFallback")
   public Mono<Customer> updateCustomer(Customer customer, String indentityNumber) {
   
     Mono<Customer> customerModification = Mono.just(customer);
@@ -69,10 +108,10 @@ public class CustomerService extends CrudServiceImpl<Customer, String>
     
     return customerDatabase
         .zipWith(customerModification, (a, b) -> {
-          
-          a.setName(b.getName());
-          a.setAddress(b.getAddress());
-          a.setPhoneNumber(b.getPhoneNumber());
+                    
+          if (b.getName() != null) a.setName(b.getName());
+          if (b.getAddress() != null) a.setAddress(b.getAddress());
+          if (b.getPhoneNumber() != null) a.setPhoneNumber(b.getPhoneNumber());
           
           return a;
           
@@ -97,9 +136,8 @@ public class CustomerService extends CrudServiceImpl<Customer, String>
     return customerDatabase
         .flatMap(objectDelete -> {
           
-          service.delete(objectDelete.getId());
-          
-          return Mono.just(Response.builder().data("Cliente Eliminado").build());
+          return service.delete(objectDelete.getId())
+              .then(Mono.just(Response.builder().data(msgCustomerDelete).build()));
           
         })
         .switchIfEmpty(Mono.error(new RuntimeException(msgNotFoundDelete)));
@@ -115,13 +153,27 @@ public class CustomerService extends CrudServiceImpl<Customer, String>
     return Mono.just(Customer
         .builder()
         .identityNumber(identityNumber)
-        .name(msgNotFound)
+        .name(ex.getMessage())
+        .build());
+    
+  }
+  
+  /** Mensaje si falla el create. */
+  public Mono<Customer> createFallback(Customer customer, Exception ex) {
+  
+    log.info("Cliente con numero de identidad {} no se pudo crear, "
+        + "retornando fallback", customer.getIdentityNumber());
+  
+    return Mono.just(Customer
+        .builder()
+        .identityNumber(customer.getIdentityNumber())
+        .name(ex.getMessage())
         .build());
     
   }
   
   /** Mensaje si falla el update. */
-  public Mono<Customer> updateCustomerFallback(Customer customer, 
+  public Mono<Customer> updateFallback(Customer customer, 
       String identityNumber, Exception ex) {
   
     log.info("Cliente con numero de identidad {} no encontrado para actualizar, "
@@ -130,21 +182,21 @@ public class CustomerService extends CrudServiceImpl<Customer, String>
     return Mono.just(Customer
         .builder()
         .identityNumber(identityNumber)
-        .name(msgNotFoundUpdate)
+        .name(ex.getMessage())
         .build());
     
   }
   
   /** Mensaje si falla el delete. */
-  public Mono<Customer> deleteFallback(String identityNumber, Exception ex) {
+  public Mono<Response> deleteFallback(String identityNumber, Exception ex) {
   
     log.info("Cliente con numero de identidad {} no encontrado para eliminar, "
         + "retornando fallback", identityNumber);
   
-    return Mono.just(Customer
+    return Mono.just(Response
         .builder()
-        .identityNumber(identityNumber)
-        .name(msgNotFoundDelete)
+        .data(identityNumber)
+        .error(ex.getMessage())
         .build());
     
   }

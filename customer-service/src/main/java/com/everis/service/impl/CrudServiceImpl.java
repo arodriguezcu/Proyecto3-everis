@@ -28,7 +28,7 @@ public abstract class CrudServiceImpl<T, K> implements InterfaceCrudService<T, K
   }
 
   @Override
-  public Mono<T> update(T o) {
+  public Mono<T> update(T o) {    
     return getRepository().save(o);
   }
 
