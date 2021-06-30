@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  web:
+    container_name: config-server
+    restart: always
+    build: .
+    ports:
+       - "8081:8081"
+#    links:
+#      - mongo
+#  mongo:
+#    container_name: customer-db
+#    image: mongo
+#    ports:
+#      - "27018:27017"

@@ -1,15 +1,16 @@
-version: '3'
+version: "3"
+
 services:
   web:
     container_name: customer-service
     restart: always
     build: .
     ports:
-      - '8090:8090'
+       - "8090:8090"
     links:
       - mongo
   mongo:
-    container_name: customer_db
+    container_name: customer-db
     image: mongo
     ports:
-      - '27018:27017'
+      - "27018:27017"

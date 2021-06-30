@@ -13,9 +13,13 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
+/**
+ * 
+ */
 @Configuration
 public class ProductTopic {
   
+  /** */
   @Bean
   public NewTopic topicProduct() {
   
@@ -27,12 +31,13 @@ public class ProductTopic {
     
   }
 
+  /** */
   @Bean
   public ProducerFactory<String, Object> producerFactory() {
   
     Map<String, Object> config = new HashMap<>();
   
-    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
+    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
   
     config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
   
@@ -42,6 +47,7 @@ public class ProductTopic {
   
   }
   
+  /** */
   @Bean
   public KafkaTemplate<String, Object> kafkaTemplate() {
   

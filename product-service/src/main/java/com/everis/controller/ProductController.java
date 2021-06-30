@@ -2,13 +2,12 @@ package com.everis.controller;
 
 import com.everis.dto.Response;
 import com.everis.model.Product;
-import com.everis.service.IProductService;
+import com.everis.service.InterfaceProductService;
 import com.everis.topic.producer.ProductProducer;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * 
+ */
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -28,8 +30,9 @@ public class ProductController {
   private ProductProducer producer;
   
   @Autowired
-  private IProductService service;
+  private InterfaceProductService service;
   
+  /** */
   @GetMapping  
   public Mono<ResponseEntity<List<Product>>> findAll() { 
     
@@ -47,10 +50,11 @@ public class ProductController {
                       .noContent()
                       .build());
           
-    });
+        });
   
   }
   
+  /** */
   @GetMapping("/{id}")
   public Mono<ResponseEntity<Product>> findById(@PathVariable("id") String id) {
     
@@ -62,8 +66,9 @@ public class ProductController {
   
   }
   
+  /** */
   @PostMapping
-  public Mono<ResponseEntity<Response>> create(@RequestBody Product product, final ServerHttpRequest request) {
+  public Mono<ResponseEntity<Response>> create(@RequestBody Product product) {
     
     Flux<Product> productDatabase = service.findAll()
         .filter(list -> list.getProductName().equals(product.getProductName()));
@@ -101,6 +106,7 @@ public class ProductController {
   
   }
   
+  /** */
   @PutMapping("/{productName}")
   public Mono<ResponseEntity<Product>> update(@RequestBody 
       Product product, @PathVariable("productName") String productName) {
@@ -114,6 +120,7 @@ public class ProductController {
   
   }
   
+  /** */
   @DeleteMapping("/{productName}")
   public Mono<ResponseEntity<Response>> delete(@PathVariable("productName") String productName) {
     

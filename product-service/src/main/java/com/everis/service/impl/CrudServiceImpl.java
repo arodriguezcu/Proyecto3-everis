@@ -1,12 +1,16 @@
 package com.everis.service.impl;
 
-import com.everis.repository.IRepository;
-import com.everis.service.ICRUDService;
+import com.everis.repository.InterfaceRepository;
+import com.everis.service.InterfaceCrudService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public abstract class CRUDServiceImpl<T, ID> implements ICRUDService<T, ID> {
-  protected abstract IRepository<T, ID> getRepository();
+/**
+ * 
+ */
+public abstract class CrudServiceImpl<T, K> implements InterfaceCrudService<T, K> {
+  
+  protected abstract InterfaceRepository<T, K> getRepository();
 
   @Override
   public Mono<T> create(T o) {  
@@ -19,7 +23,7 @@ public abstract class CRUDServiceImpl<T, ID> implements ICRUDService<T, ID> {
   }
 
   @Override
-  public Mono<T> findById(ID id) {
+  public Mono<T> findById(K id) {
     return getRepository().findById(id);
   }
 
@@ -29,7 +33,7 @@ public abstract class CRUDServiceImpl<T, ID> implements ICRUDService<T, ID> {
   }
 
   @Override
-  public Mono<Void> delete(ID id) {
+  public Mono<Void> delete(K id) {
     return getRepository().deleteById(id);
   }
 

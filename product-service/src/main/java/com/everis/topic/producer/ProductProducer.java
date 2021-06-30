@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 
+/**
+ * 
+ */
 @Component
 public class ProductProducer {
   
@@ -15,6 +18,7 @@ public class ProductProducer {
   
   private String createdProductTopic = "saved-product-topic";
 
+  /**  */
   public Disposable sendSavedProductTopic(Product data) {
   
     return Mono.just(data)
