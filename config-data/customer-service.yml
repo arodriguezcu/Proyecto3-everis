@@ -17,6 +17,8 @@ msg:
   error:
     registro:      
       notfound: CLIENTE NO IDENTIFICADO
+      notfound.create: CLIENTE NO SE PUDO CREAR
+      if.exists: CLIENTE YA EXISTE
       notfound.update: CLIENTE NO IDENTIFICADO PARA ACTUALIZAR
       notfound.delete: CLIENTE NO IDENTIFICADO PARA ELIMINAR
       customer.delete: CLIENTE ELIMINADO
