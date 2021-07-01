@@ -7,7 +7,7 @@ spring:
   data:
     mongodb:
 #      uri: mongodb://localhost:27017/customer
-      uri: mongodb://192.168.0.106:27017/customer
+      uri: mongodb://mongo:27017/customer
   kafka:
 #    bootstrap-servers: localhost:29092
     bootstrap-servers: 192.168.0.106:29092
