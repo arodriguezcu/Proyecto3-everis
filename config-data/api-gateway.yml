@@ -1,7 +1,7 @@
 server:
   port: 8080
-#  hostname: localhost
-  hostname: 192.168.0.106
+  hostname: localhost
+#  hostname: 192.168.0.106
 
 #routers
 zuul:
