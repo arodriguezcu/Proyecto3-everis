@@ -7,39 +7,39 @@ server:
 zuul:
   routes:
     customer:
-      path: /**
+      path: /api/**
       service-id: customer-service
       url: http://${server.hostname}:8090/
     product:
-      path: /**
+      path: /api/**
       service-id: product-service
       url: http://${server.hostname}:8091/
     purchase:
-      path: /**
+      path: /api/**
       service-id: purchase-service
       url: http://${server.hostname}:8092/
     transaction:
-      path: /**
+      path: /api/**
       service-id: transaction-service
       url: http://${server.hostname}:8093/
     account:
-      path: /**
+      path: /api/**
       service-id: account-service
       url: http://${server.hostname}:8094/
     withdrawal:
-      path: /**
+      path: /api/**
       service-id: withdrawal-service
       url: http://${server.hostname}:8095/
     deposit:
-      path: /**
+      path: /api/**
       service-id: deposit-service
       url: http://${server.hostname}:8096/
     credit:
-      path: /**
+      path: /api/**
       service-id: credit-service
       url: http://${server.hostname}:8097/
     payment:
-      path: /**
+      path: /api/**
       service-id: payment-service
       url: http://${server.hostname}:8098/
         
