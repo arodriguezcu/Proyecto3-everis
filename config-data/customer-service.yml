@@ -10,13 +10,13 @@ spring:
       uri: mongodb://mongo:27017/customer
   kafka:
 #    bootstrap-servers: localhost:29092
-    bootstrap-servers: 192.168.0.106:29092
+    bootstrap-servers: 192.168.0.106:8761
 
 kafka:
   server:
 #    hostname: localhost
     hostname: 192.168.0.106
-    port: 29092
+    port: 8761
 
 eureka:
   client:
