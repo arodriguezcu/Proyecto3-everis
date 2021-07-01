@@ -8,6 +8,6 @@ spring:
         git:
           uri: https://github.com/arodriguezcu/Proyecto3-everis.git
           searchPaths: config-data
-# 	      username: ${GITUSER}
-#		      password: ${GITPASS}
+#          username: ${GITUSER}
+#          password: ${GITPASS}
           default-label: main
