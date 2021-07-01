@@ -1,15 +1,15 @@
 server:
   port: 8098
-  hostname: localhost
-#  hostname: 192.168.0.106
+#  hostname: localhost
+  hostname: 192.168.0.106
   
 spring:
   application:
     name: credit-payment-service
   data:
     mongodb:
-      uri: mongodb://${server.hostname}:27017/db_payment
-#      uri: mongodb://mongo:27017/db_payment
+#      uri: mongodb://${server.hostname}:27017/db_payment
+      uri: mongodb://mongo:27017/db_payment
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 

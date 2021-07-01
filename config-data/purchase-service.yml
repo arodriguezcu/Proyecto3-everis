@@ -1,15 +1,15 @@
 server:
   port: 8092
-  hostname: localhost
-#  hostname: 192.168.0.106
+#  hostname: localhost
+  hostname: 192.168.0.106
   
 spring:
   application:
     name: purchase-service
   data:
     mongodb:
-      uri: mongodb://${server.hostname}:27017/db_purchase
-#      uri: mongodb://mongo:27017/db_purchase
+#      uri: mongodb://${server.hostname}:27017/db_purchase
+      uri: mongodb://mongo:27017/db_purchase
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 
