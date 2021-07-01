@@ -6,17 +6,17 @@ spring:
     name: customer-service
   data:
     mongodb:
-#      uri: mongodb://localhost:27017/customer
-      uri: mongodb://192.168.0.106:27017/customer
+      uri: mongodb://localhost:27017/customer
+#      uri: mongodb://192.168.0.106:27017/customer
 #      uri: mongodb://mongo:27017/customer
   kafka:
-#    bootstrap-servers: localhost:29092
-    bootstrap-servers: 192.168.0.106:8761
+    bootstrap-servers: localhost:29092
+#    bootstrap-servers: 192.168.0.106:8761
 
 kafka:
   server:
-#    hostname: localhost
-    hostname: 192.168.0.106
+    hostname: localhost
+#    hostname: 192.168.0.106
     port: 8761
 
 eureka:
@@ -27,8 +27,8 @@ eureka:
     fetch-registry: true
   instance:
     prefer-ip-address: true
-#    hostname: localhost
-    hostname: 192.168.0.106
+    hostname: localhost
+#    hostname: 192.168.0.106
 
 msg:
   error:
