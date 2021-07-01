@@ -8,8 +8,8 @@ spring:
     name: credit-consumer-service
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:27017/db_credit
-      uri: mongodb://mongo:27017/db_credit
+      uri: mongodb://${server.hostname}:27017/db_credit
+#      uri: mongodb://mongo:27017/db_credit
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 

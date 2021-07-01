@@ -8,8 +8,8 @@ spring:
     name: product-service
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:27017/db_product
-      uri: mongodb://mongo:27017/db_product
+      uri: mongodb://${server.hostname}:27017/db_product
+#      uri: mongodb://mongo:27017/db_product
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 

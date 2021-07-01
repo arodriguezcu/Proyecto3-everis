@@ -8,8 +8,8 @@ spring:
     name: deposit-service
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:27017/db_deposit
-      uri: mongodb://mongo:27017/db_deposit
+      uri: mongodb://${server.hostname}:27017/db_deposit
+#      uri: mongodb://mongo:27017/db_deposit
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 

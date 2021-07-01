@@ -8,8 +8,8 @@ spring:
     name: withdrawal-service
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:27017/db_withdrawal
-      uri: mongodb://mongo:27017/db_withdrawal
+      uri: mongodb://${server.hostname}:27017/db_withdrawal
+#      uri: mongodb://mongo:27017/db_withdrawal
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 

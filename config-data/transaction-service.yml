@@ -8,8 +8,8 @@ spring:
     name: transaction-service
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:27017/db_transaction
-      uri: mongodb://mongo:27017/db_transaction
+      uri: mongodb://${server.hostname}:27017/db_transaction
+#      uri: mongodb://mongo:27017/db_transaction
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 
