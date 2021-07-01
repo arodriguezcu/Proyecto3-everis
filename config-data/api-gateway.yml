@@ -1,13 +1,13 @@
 server:
   port: 8080
-  hostname: localhost
-#  hostname: 192.168.0.106
+#  hostname: localhost
+  hostname: 192.168.0.106
 
 #routers
 zuul:
   routes:
     customer:
-      path: /api/customer-service/**
+      path: /**
       service-id: customer-service
       url: http://${server.hostname}:8090/
     product:

@@ -3,11 +3,11 @@ server:
 
 eureka:
   instance:
-    hostname: localhost
-#    hostname: 192.168.0.106
+#    hostname: localhost
+    hostname: 192.168.0.106
   client:
     fetch-registry: false
     register-with-eureka: false
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-#      defaultZone: http://192.168.0.106:8761/eureka/
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://192.168.0.106:8761/eureka/
