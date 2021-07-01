@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  web:
+    container_name: account-service
+    restart: always
+    build: .
+    ports:
+       - "8094:8094"
+    links:
+      - mongo
+  mongo:
+    container_name: account-db
+    image: mongo
+    ports:
+      - "27024:27017"

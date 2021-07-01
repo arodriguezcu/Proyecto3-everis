@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  web:
+    container_name: transaction-service
+    restart: always
+    build: .
+    ports:
+       - "8093:8093"
+    links:
+      - mongo
+  mongo:
+    container_name: transaction-db
+    image: mongo
+    ports:
+      - "27023:27017"

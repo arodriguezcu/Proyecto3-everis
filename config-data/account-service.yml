@@ -1,23 +1,38 @@
 server:
   port: 8094
+#  hostname: localhost
+  hostname: 192.168.0.106
   
 spring:
   application:
     name: account-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/account
+#      uri: mongodb://${server.hostname}:27017/db_account
+      uri: mongodb://mongo:27017/db_account
+  kafka:
+    bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
       
+kafka:
+  server:
+    hostname: ${server.hostname}
+    port: 29092
+    
 eureka:
-    client:
-        service-url:
-            defaultZone: http://localhost:8761/eureka
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    hostname: ${server.hostname}
             
 msg:
-    error:
-        registro:
-            notfound: CUENTA NO IDENTIFICADA
-            notfound.update: CUENTA NO IDENTIFICADA PARA ACTUALIZAR
+  error:
+    registro:
+      notfound: CUENTA NO IDENTIFICADA
+      notfound.update: CUENTA NO IDENTIFICADA PARA ACTUALIZAR
 
 resilience4j:
   circuitbreaker:

@@ -3,8 +3,8 @@ server:
 
 eureka:
   instance:
-    hostname: localhost
-#    hostname: 192.168.0.106
+#    hostname: localhost
+    hostname: 192.168.0.106
   client:
     fetch-registry: false
     register-with-eureka: false

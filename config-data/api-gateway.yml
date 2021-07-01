@@ -1,7 +1,7 @@
 server:
   port: 8080
-  hostname: localhost
-#  hostname: 192.168.0.106
+#  hostname: localhost
+  hostname: 192.168.0.106
 
 #routers
 zuul:
@@ -11,35 +11,35 @@ zuul:
       service-id: customer-service
       url: http://${server.hostname}:8090/
     product:
-      path: /api/product-service/**
+      path: /**
       service-id: product-service
       url: http://${server.hostname}:8091/
     purchase:
-      path: /api/purchase-service/**
+      path: /**
       service-id: purchase-service
       url: http://${server.hostname}:8092/
     transaction:
-      path: /api/transaction-service/**
+      path: /**
       service-id: transaction-service
       url: http://${server.hostname}:8093/
     account:
-      path: /api/account-service/**
+      path: /**
       service-id: account-service
       url: http://${server.hostname}:8094/
     withdrawal:
-      path: /api/withdrawal-service/**
+      path: /**
       service-id: withdrawal-service
       url: http://${server.hostname}:8095/
     deposit:
-      path: /api/deposit-service/**
+      path: /**
       service-id: deposit-service
       url: http://${server.hostname}:8096/
     credit:
-      path: /api/credit-service/**
+      path: /**
       service-id: credit-service
       url: http://${server.hostname}:8097/
     payment:
-      path: /api/payment-service/**
+      path: /**
       service-id: payment-service
       url: http://${server.hostname}:8098/
         

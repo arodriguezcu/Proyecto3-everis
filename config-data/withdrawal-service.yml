@@ -1,31 +1,43 @@
 server:
   port: 8095
+#  hostname: localhost
+  hostname: 192.168.0.106
   
 spring:
   application:
     name: withdrawal-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/withdrawal
+#      uri: mongodb://${server.hostname}:27017/db_withdrawal
+      uri: mongodb://mongo:27017/db_withdrawal
+  kafka:
+    bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
+
+kafka:
+  server:
+    hostname: ${server.hostname}
+    port: 29092
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    hostname: ${server.hostname}
 
 topic:
   name: withdrawal-topic
   partitions: 1
   replicas: 1
-
-kafka:
-  uri: localhost:9092
-
-eureka:
-    client:
-        service-url:
-            defaultZone: http://localhost:8761/eureka
             
 msg:
-    error:
-        registro:
-            notfound: ID DE RETIRO NO ENCONTRADO
-            notfound.update: ID DE RETIRO NO ENCONTRADO PARA ACTUALIZAR
+  error:
+    registro:
+      notfound: ID DE RETIRO NO ENCONTRADO
+      notfound.update: ID DE RETIRO NO ENCONTRADO PARA ACTUALIZAR
             
 resilience4j:
   circuitbreaker:

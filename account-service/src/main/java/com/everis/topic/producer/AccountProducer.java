@@ -16,7 +16,7 @@ public class AccountProducer {
   
   public void sendCreatedAccount(Account account) {
   
-  kafkaTemplate.send(createdAccountTopic, account);
+    kafkaTemplate.send(createdAccountTopic, account);
     
   }
   

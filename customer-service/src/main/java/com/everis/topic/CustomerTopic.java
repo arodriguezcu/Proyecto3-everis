@@ -25,8 +25,7 @@ public class CustomerTopic {
   
   @Value("${kafka.server.port}")
   private String port;
-  
-  
+    
   /** Crea una instancia de esta clase. */
   @Bean
   public NewTopic topicCustomer() {

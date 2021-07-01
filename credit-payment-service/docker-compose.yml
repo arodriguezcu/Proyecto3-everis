@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  web:
+    container_name: credit-payment-service
+    restart: always
+    build: .
+    ports:
+       - "8098:8098"
+    links:
+      - mongo
+  mongo:
+    container_name: payment-db
+    image: mongo
+    ports:
+      - "27028:27017"

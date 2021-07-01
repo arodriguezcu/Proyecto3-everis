@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  web:
+    container_name: product-service
+    restart: always
+    build: .
+    ports:
+       - "8091:8091"
+    links:
+      - mongo
+  mongo:
+    container_name: product-db
+    image: mongo
+    ports:
+      - "27021:27017"
