@@ -3,9 +3,9 @@ server:
 
 eureka:
   instance:
-#    hostname: localhost
+    hostname: localhost
 #    hostname: 192.168.0.106
-    hostname: https://docker-config-server.azurewebsites.net/
+#    hostname: https://docker-config-server.azurewebsites.net/
   client:
     fetch-registry: false
     register-with-eureka: false
