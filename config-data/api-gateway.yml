@@ -6,8 +6,8 @@ server:
 eureka:
   client:
     service-url:
-#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
-      defaultZone: https://docker-eureka-server.azurewebsites.net/
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+#      defaultZone: https://docker-eureka-server.azurewebsites.net/
     register-with-eureka: true
     fetch-registry: true
   instance:
