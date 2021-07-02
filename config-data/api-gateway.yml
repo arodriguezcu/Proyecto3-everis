@@ -1,7 +1,18 @@
 server:
   port: 8080
 #  hostname: localhost
-  hostname: 192.168.0.106
+#  hostname: 192.168.0.106
+
+eureka:
+  client:
+    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+      defaultZone: https://docker-eureka-server.azurewebsites.net/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+#    hostname: ${server.hostname}
 
 #routers
 zuul:
@@ -9,37 +20,37 @@ zuul:
     customer:
       path: /api/customer-service/**
       service-id: customer-service
-      url: http://${server.hostname}:8090/
+      url: lb://customer-service
     product:
-      path: /api/**
+      path: /api/product-service/**
       service-id: product-service
-      url: http://${server.hostname}:8091/
+      url: lb://product-service
     purchase:
-      path: /api/**
+      path: /api/purchase-service/**
       service-id: purchase-service
-      url: http://${server.hostname}:8092/
+      url: lb://purchase-service
     transaction:
-      path: /api/**
+      path: /api/transaction-service/**
       service-id: transaction-service
-      url: http://${server.hostname}:8093/
+      url: lb://transaction-service
     account:
-      path: /api/**
+      path: /api/account-service/**
       service-id: account-service
-      url: http://${server.hostname}:8094/
+      url: lb://account-service
     withdrawal:
-      path: /api/**
+      path: /api/withdrawal-service/**
       service-id: withdrawal-service
-      url: http://${server.hostname}:8095/
+      url: lb://withdrawal-service
     deposit:
-      path: /api/**
+      path: /api/deposit-service/**
       service-id: deposit-service
-      url: http://${server.hostname}:8096/
+      url: lb://deposit-service
     credit:
-      path: /api/**
+      path: /api/credit-service/**
       service-id: credit-service
-      url: http://${server.hostname}:8097/
+      url: lb://credit-service
     payment:
-      path: /api/**
+      path: /api/payment-service/**
       service-id: payment-service
-      url: http://${server.hostname}:8098/
+      url: lb://payment-service
         
