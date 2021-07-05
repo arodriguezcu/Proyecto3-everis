@@ -10,13 +10,14 @@ spring:
     mongodb:
       uri: mongodb://${server.hostname}:27017/db_product
 #      uri: mongodb://mongo:27017/db_product
-  kafka:
-    bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
+#  kafka:
+#    bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 
 kafka:
   server:
     hostname: ${server.hostname}
-    port: 29092
+#    port: 29092
+    port: 9092
 
 eureka:
   client:
