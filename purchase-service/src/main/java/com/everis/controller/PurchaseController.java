@@ -1,13 +1,8 @@
 package com.everis.controller;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.everis.dto.Response;
 import com.everis.model.Customer;
 import com.everis.model.Product;
@@ -29,7 +23,6 @@ import com.everis.service.ICustomerService;
 import com.everis.service.IProductService;
 import com.everis.service.IPurchaseService;
 import com.everis.topic.producer.PurchaseProducer;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -101,46 +94,75 @@ public class PurchaseController {
   
     Flux<Purchase> purchaseDatabase = service.findAll()
         .filter(p -> p.getCustomerOwner().get(0).getIdentityNumber().equals(identityNumber));
-    
-    Flux<Product> productDatabase = productService.findAll();
-  
+        
+    Mono<Customer> customerDatabase = customerService.findByIdentityNumber(identityNumber);
+        
     return purchaseDatabase
         .collectList()
         .flatMap(list -> {
-                    
-//          List<String> productos = new ArrayList<>();
           
-          for (Purchase purchase : list) {
-            
-            if (purchase.getProduct().getCondition().getProductPerPersonLimit().equals(1)) {
-              
-//              productos.add(purchase.getProduct().getProductName());
-              
-              productDatabase.filter(p -> !p.getProductName().equals(purchase.getProduct().getProductName()));
-              
-            }
-            
-          }
-          
-//          productos = productos.stream().distinct().collect(Collectors.toList());
-
-          return productDatabase
-              .collectList()
-              .flatMap(products -> {
+          return customerDatabase
+              .flatMap(c -> {
                 
-                return products.size() > 0
-                    ?
-                        Mono.just(ResponseEntity
-                            .ok()
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .body(products))
-                      :
-                        Mono.just(ResponseEntity
-                            .noContent()
-                            .build());
+                if (c.getId() == null) {
+                  
+                  return Mono.just(ResponseEntity
+                      .noContent()
+                      .build());
+                              
+                }
+                
+                Flux<Product> productDatabase = productService.findAll();                
+                
+                if (c.getCustomerType().equalsIgnoreCase("PERSONAL")) {
+                  
+                  productDatabase = productDatabase.filter(p -> !p.getCondition().getProductPerPersonLimit().equals(0));
+                  
+                  for (Purchase purchase : list) {
+                    
+                    if (purchase.getProduct().getCondition().getProductPerPersonLimit().equals(1)) {
+                      
+                      productDatabase = productDatabase.filter(p -> !p.getProductName().equals(purchase.getProduct().getProductName()));                    
+                      
+                    }
+                    
+                  }
+                  
+                } else if (c.getCustomerType().equalsIgnoreCase("EMPRESARIAL")) {
+                  
+                  productDatabase = productDatabase.filter(p -> !p.getCondition().getProductPerBusinessLimit().equals(0));
+                  
+                  for (Purchase purchase : list) {
+                    
+                    if (purchase.getProduct().getCondition().getProductPerBusinessLimit().equals(1)) {
+                      
+                      productDatabase = productDatabase.filter(p -> !p.getProductName().equals(purchase.getProduct().getProductName()));
+                      
+                    }
+                    
+                  }
+                  
+                }
+                
+                return productDatabase
+                    .collectList()
+                    .flatMap(products -> {
+                
+                      return products.size() > 0
+                          ?
+                              Mono.just(ResponseEntity
+                                  .ok()
+                                  .contentType(MediaType.APPLICATION_JSON)
+                                  .body(products))
+                          :
+                              Mono.just(ResponseEntity
+                                  .noContent()
+                                  .build());
+                      
+                    });
                 
               });
-      
+          
         });
   
   }
@@ -298,7 +320,8 @@ public class PurchaseController {
                   
                 }
                 
-                if (purchasebd.getProduct().getProductName().equals("CREDITO PERSONAL") || purchasebd.getProduct().getProductName().equals("CREDITO EMPRESARIAL")) {
+                if (purchasebd.getProduct().getProductName().equals("CREDITO PERSONAL") || 
+                    purchasebd.getProduct().getProductName().equals("CREDITO EMPRESARIAL")) {
                   
                   purchasebd.setAmountFin(0);
                   purchase.setAmountFin(0);

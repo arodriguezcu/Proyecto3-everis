@@ -29,7 +29,7 @@ public class PurchaseTopic {
   
   return TopicBuilder
     .name("created-purchase-topic")
-    .partitions(4)
+    .partitions(1)
     .replicas(1)
     .build();
   
