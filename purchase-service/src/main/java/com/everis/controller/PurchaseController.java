@@ -1,7 +1,10 @@
 package com.everis.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -91,7 +94,56 @@ public class PurchaseController {
       
         });
   
-  }  
+  }
+  
+  @GetMapping("/available/{identityNumber}")
+  public Mono<ResponseEntity<List<Product>>> findByAvailableProduct(@PathVariable("identityNumber") String identityNumber) {
+  
+    Flux<Purchase> purchaseDatabase = service.findAll()
+        .filter(p -> p.getCustomerOwner().get(0).getIdentityNumber().equals(identityNumber));
+    
+    Flux<Product> productDatabase = productService.findAll();
+  
+    return purchaseDatabase
+        .collectList()
+        .flatMap(list -> {
+                    
+//          List<String> productos = new ArrayList<>();
+          
+          for (Purchase purchase : list) {
+            
+            if (purchase.getProduct().getCondition().getProductPerPersonLimit().equals(1)) {
+              
+//              productos.add(purchase.getProduct().getProductName());
+              
+              productDatabase.filter(p -> !p.getProductName().equals(purchase.getProduct().getProductName()));
+              
+            }
+            
+          }
+          
+//          productos = productos.stream().distinct().collect(Collectors.toList());
+
+          return productDatabase
+              .collectList()
+              .flatMap(products -> {
+                
+                return products.size() > 0
+                    ?
+                        Mono.just(ResponseEntity
+                            .ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(products))
+                      :
+                        Mono.just(ResponseEntity
+                            .noContent()
+                            .build());
+                
+              });
+      
+        });
+  
+  }
   
   @PostMapping
   public Mono<ResponseEntity<Response>> create(@Valid @RequestBody Purchase purchase, final ServerHttpRequest request){
