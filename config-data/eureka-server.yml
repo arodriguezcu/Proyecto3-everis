@@ -9,5 +9,6 @@ eureka:
     fetch-registry: false
     register-with-eureka: false
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 #      defaultZone: https://docker-eureka-server.azurewebsites.net/
+      defaultZone: http://eureka-server-az.azurewebsites.net/
