@@ -76,6 +76,69 @@ public class TransactionController {
     
   }
   
+  //Implementar un reporte con los últimos 10 movimientos de la tarjeta de débito y de crédito.
+  @GetMapping("list10/{cardNumber}")
+  public Mono<ResponseEntity<Response>> findTop10ByCardNumber(@PathVariable("cardNumber") String cardNumber) { 
+  
+    return service.findAll().filter(list -> list.getPurchase().getCardNumber().equals(cardNumber))
+        .takeLast(10)
+        .collectList()
+        .flatMap(list -> {
+        
+          return list.size() > 0 
+              ?
+                  Mono.just(ResponseEntity
+                      .ok()
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .body(Response
+                          .builder()
+                          .data(list)
+                          .build()))
+              :
+                  Mono.just(ResponseEntity
+                      .badRequest()
+                      .body(Response
+                          .builder()
+                          .error("El numero de tarjeta " + cardNumber + " no existe.")
+                          .build()));
+          
+      });
+    
+  }
+  
+  //Consultar el saldo de la cuenta principal asociada a la tarjeta de débito
+  @GetMapping("current-balance/{cardNumber}")
+  public Mono<Object> currentBalance(@PathVariable("cardNumber") String cardNumber) { 
+  
+    /*return service.findAll().filter(list -> list.getPurchase().getCardNumber().equals(cardNumber))
+            .takeLast(1);*/
+    
+    return service.findAll().filter(list -> list.getPurchase().getCardNumber().equals(cardNumber))
+        .takeLast(1)
+        .collectList()
+        .flatMap(list -> {
+        
+          return list.size() > 0 
+              ?
+                  Mono.just(ResponseEntity
+                      .ok()
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .body(Response
+                          .builder()
+                          .data(list)
+                          .build()))
+              :
+                  Mono.just(ResponseEntity
+                      .badRequest()
+                      .body(Response
+                          .builder()
+                          .error("El numero de tarjeta " + cardNumber + " no existe.")
+                          .build()));
+          
+      });
+    
+  }
+  
   @GetMapping("/commission/{cardNumber}")
   public Mono<ResponseEntity<Response>> findAllByCommission(@PathVariable("cardNumber") String cardNumber) { 
   
