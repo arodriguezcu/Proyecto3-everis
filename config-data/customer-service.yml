@@ -26,12 +26,12 @@ eureka:
   client:
     service-url:
 #      defaultZone: http://${eureka.instance.hostname}:8761/eureka      
-      defaultZone: http://az-eureka-server.azurewebsites.net:80/eureka/
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-#    hostname: ${server.hostname}
+    hostname: az-eureka-server.azurewebsites.net
 
 msg:
   error:
