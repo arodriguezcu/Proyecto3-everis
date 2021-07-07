@@ -27,11 +27,11 @@ public class PurchaseTopic {
   @Bean
   public NewTopic createPurchaseTopic() {
   
-  return TopicBuilder
-    .name("created-purchase-topic")
-    .partitions(1)
-    .replicas(1)
-    .build();
+    return TopicBuilder
+      .name("created-purchase-topic")
+      .partitions(1)
+      .replicas(1)
+      .build();
   
   }
 

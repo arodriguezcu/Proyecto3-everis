@@ -49,12 +49,12 @@ public class PurchaseConsumer {
   @KafkaListener(topics = "saved-customer-topic", groupId = "purchase-group")
   public Disposable retrieveSavedCustomer(String data) throws Exception {
   
-  Customer customer = objectMapper.readValue(data, Customer.class);
-  
-  return Mono.just(customer)
-    .log()
-    .flatMap(customerService::update)
-    .subscribe();
+    Customer customer = objectMapper.readValue(data, Customer.class);
+    
+    return Mono.just(customer)
+      .log()
+      .flatMap(customerService::update)
+      .subscribe();
   
   }
   
