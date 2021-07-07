@@ -19,7 +19,7 @@ kafka:
   server:
 #    hostname: ${server.hostname}
     hostname: 20.88.211.57
-#    port: 29092
+#    port: 9092
     port: 29092
 
 eureka:
