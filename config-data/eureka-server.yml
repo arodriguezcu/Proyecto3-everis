@@ -14,7 +14,7 @@
 #      defaultZone: http://eureka-server-az.azurewebsites.net/
 
 server:
-  port: 8761
+  port: 80
 management:
   server:
     port: ${server.port}

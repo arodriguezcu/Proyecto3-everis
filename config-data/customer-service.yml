@@ -1,6 +1,6 @@
 server:
-  port: 8090
-#  port: 80
+#  port: 8090
+  port: 80
 #  hostname: localhost
 #  hostname: 192.168.0.106
     
@@ -26,7 +26,7 @@ eureka:
   client:
     service-url:
 #      defaultZone: http://${eureka.instance.hostname}:8761/eureka      
-      defaultZone: https://az-eureka-server.azurewebsites.net:8761/eureka
+      defaultZone: https://az-eureka-server.azurewebsites.net/eureka
     register-with-eureka: true
     fetch-registry: true
   instance:
