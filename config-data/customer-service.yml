@@ -31,6 +31,7 @@ eureka:
     fetch-registry: true
   instance:
     prefer-ip-address: true
+#    hostname: ${server.hostname}
     hostname: az-eureka-server.azurewebsites.net
 
 msg:
