@@ -26,7 +26,7 @@ eureka:
   client:
     service-url:
 #      defaultZone: http://${eureka.instance.hostname}:8761/eureka      
-      defaultZone: https://az-eureka-server.azurewebsites.net/eureka
+      defaultZone: http://az-eureka-server.azurewebsites.net/eureka
     register-with-eureka: true
     fetch-registry: true
   instance:
