@@ -17,7 +17,6 @@ spring:
 
 kafka:
   server:
-#    hostname: kafka
     hostname: ${server.hostname}
 #    hostname: 192.168.0.106
 #    port: 29092
