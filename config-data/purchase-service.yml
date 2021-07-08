@@ -1,7 +1,7 @@
 server:
-  port: 8092
-#  port: 80
-  hostname: localhost
+#  port: 8092
+  port: 80
+#  hostname: localhost
 #  hostname: 192.168.0.106
   
 spring:
@@ -15,8 +15,8 @@ spring:
 
 kafka:
   server:
-    hostname: ${server.hostname}
-#    hostname: 52.255.82.239
+#    hostname: ${server.hostname}
+    hostname: 20.94.153.173
     port: 9092
 #    port: 29092
 #    port: 80
@@ -24,14 +24,14 @@ kafka:
 eureka:
   client:
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka
-#      defaultZone: http://${eureka.instance.hostname}:80/eureka/
+#      defaultZone: http://${eureka.instance.hostname}:8761/eureka      
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-    hostname: ${server.hostname}
-#    hostname: az-eureka-server.azurewebsites.net
+#    hostname: ${server.hostname}
+    hostname: az-eureka-server.azurewebsites.net
       
 topic:
   name: purchase-topic
