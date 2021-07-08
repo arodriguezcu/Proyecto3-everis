@@ -18,7 +18,7 @@ spring:
 kafka:
   server:
 #    hostname: ${server.hostname}
-    hostname: 20.88.211.57
+    hostname: 52.255.82.239
     port: 9092
 #    port: 29092
 #    port: 80

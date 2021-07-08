@@ -20,11 +20,14 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 @Configuration
 public class CustomerTopic {
   
-  @Value("${kafka.server.hostname}")
-  private String hostName;
+//  @Value("${kafka.server.hostname}")
+//  private String hostName;
+//  
+//  @Value("${kafka.server.port}")
+//  private String port;
   
-  @Value("${kafka.server.port}")
-  private String port;
+  @Value("${spring.kafka.bootstrap-servers}")
+  private String host;
     
   /** Crea una instancia de esta clase. */
   @Bean
@@ -45,8 +48,9 @@ public class CustomerTopic {
     Map<String, Object> config = new HashMap<>();
   
 //    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, hostName + ":" + port);
-    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "20.88.211.57:9092");
   
+    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
+    
     config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
   
     config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
