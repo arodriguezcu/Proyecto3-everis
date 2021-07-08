@@ -40,7 +40,8 @@ public class PurchaseTopic {
   
   Map<String, Object> config = new HashMap<>();
   
-  config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, hostName + ":" + port);
+//  config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, hostName + ":" + port);
+  config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "20.88.211.57:9092");
   
   config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
   
