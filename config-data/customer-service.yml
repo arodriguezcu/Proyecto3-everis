@@ -1,7 +1,7 @@
 server:
-#  port: 8090
-  port: 80
-#  hostname: localhost
+  port: 8090
+#  port: 80
+  hostname: localhost
 #  hostname: 192.168.0.106
     
 spring:
@@ -26,14 +26,14 @@ kafka:
 eureka:
   client:
     service-url:
-#      defaultZone: http://${eureka.instance.hostname}:8761/eureka      
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka      
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-#    hostname: ${server.hostname}
-    hostname: az-eureka-server.azurewebsites.net
+    hostname: ${server.hostname}
+#    hostname: az-eureka-server.azurewebsites.net
 
 msg:
   error:
