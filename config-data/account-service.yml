@@ -1,32 +1,37 @@
 server:
   port: 8094
+#  port: 80
 #  hostname: localhost
-  hostname: 192.168.0.106
+#  hostname: 192.168.0.106
   
 spring:
   application:
     name: account-service
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:27017/db_account
-      uri: mongodb://mongo:27017/db_account
+      uri: mongodb://arodriguezcu:WoZiG7Enr4sZXJsPA6J1yAICIAeGAzczurFJNm8k3q0apmZjMRPlAdHKqoA4vCnXvwLT40VxnskXjU6AwznsuA==@arodriguezcu.mongo.cosmos.azure.com:10255/db_account?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@arodriguezcu@
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
       
 kafka:
   server:
-    hostname: ${server.hostname}
-    port: 29092
+#    hostname: ${server.hostname}
+    hostname: 20.94.153.173
+    port: 9092
+#    port: 29092
+#    port: 80
     
 eureka:
   client:
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-    hostname: ${server.hostname}
+#    hostname: ${server.hostname}
+    hostname: az-eureka-server.azurewebsites.net
             
 msg:
   error:
