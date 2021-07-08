@@ -9,8 +9,6 @@ spring:
     name: customer-service
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:27017/db_customer
-#      uri: mongodb://mongo:27017/db_customer
       uri: mongodb://arodriguezcu:WoZiG7Enr4sZXJsPA6J1yAICIAeGAzczurFJNm8k3q0apmZjMRPlAdHKqoA4vCnXvwLT40VxnskXjU6AwznsuA==@arodriguezcu.mongo.cosmos.azure.com:10255/db_customer?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@arodriguezcu@
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
@@ -19,8 +17,8 @@ kafka:
   server:
     hostname: ${server.hostname}
 #    hostname: 192.168.0.106
-#    port: 29092
     port: 9092
+#    port: 29092
 #    port: 80
 
 eureka:
