@@ -1,13 +1,14 @@
 package com.everis.service.impl;
 
 import com.everis.dto.Response;
-import com.everis.exception.EntityNotFoundException;
 import com.everis.model.Customer;
 import com.everis.repository.InterfaceCustomerRepository;
 import com.everis.repository.InterfaceRepository;
 import com.everis.service.InterfaceCustomerService;
 import com.everis.topic.producer.CustomerProducer;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,25 +25,28 @@ public class CustomerService extends CrudServiceImpl<Customer, String>
     implements InterfaceCustomerService {
 
   private final String circuitBreaker = "customerServiceCircuitBreaker";
+      
+  @Value("${msg.error.registro.notfound.all}")
+  public String msgNotFoundAll;
   
   @Value("${msg.error.registro.notfound}")
-  private String msgNotFound;
+  public String msgNotFound;
   
   @Value("${msg.error.registro.if.exists}")
-  private String msgIfExists;
+  public String msgIfExists;
   
   @Value("${msg.error.registro.notfound.create}")
-  private String msgNotFoundCreate;  
+  public String msgNotFoundCreate;  
   
   @Value("${msg.error.registro.notfound.update}")
-  private String msgNotFoundUpdate;
+  public String msgNotFoundUpdate;
   
   @Value("${msg.error.registro.notfound.delete}")
-  private String msgNotFoundDelete;
+  public String msgNotFoundDelete;
 
   @Value("${msg.error.registro.customer.delete}")
-  private String msgCustomerDelete;
-  
+  public String msgCustomerDelete;
+    
   @Autowired
   private InterfaceCustomerRepository repository;
   
@@ -60,11 +64,29 @@ public class CustomerService extends CrudServiceImpl<Customer, String>
   }
   
   @Override
+  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "findAllFallback")
+  public Mono<List<Customer>> findAllCustomer() {
+    
+    return repository.findAll()
+        .collectList()
+        .flatMap(list -> {
+          
+          return list.size() > 0 
+              ?
+                  Mono.just(list)
+              :                
+                  Mono.error(new RuntimeException(msgNotFoundAll));
+          
+        });
+  
+  }
+  
+  @Override
   @CircuitBreaker(name = circuitBreaker, fallbackMethod = "customerFallback")
   public Mono<Customer> findByIdentityNumber(String identityNumber) {
     
     return repository.findByIdentityNumber(identityNumber)
-        .switchIfEmpty(Mono.error(new EntityNotFoundException(msgNotFound)));
+        .switchIfEmpty(Mono.error(new RuntimeException(msgNotFound)));
   
   }
   
@@ -144,7 +166,23 @@ public class CustomerService extends CrudServiceImpl<Customer, String>
     
   }
   
-  /** Mensaje si no hay customer. */
+  /** Mensaje si no existen customer. */
+  public Mono<List<Customer>> findAllFallback(Exception ex) {
+    
+    log.info("Clientes no encontrados, retornando fallback");
+  
+    List<Customer> list = new ArrayList<>();
+    
+    list.add(Customer
+        .builder()
+        .name(ex.getMessage())
+        .build());
+    
+    return Mono.just(list);
+    
+  }
+  
+  /** Mensaje si no existe customer con ese numero de identidad. */
   public Mono<Customer> customerFallback(String identityNumber, Exception ex) {
     
     log.info("Cliente con numero de identidad {} no encontrado, "

@@ -20,16 +20,10 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 @Configuration
 public class CustomerTopic {
   
-//  @Value("${kafka.server.hostname}")
-//  private String hostName;
-//  
-//  @Value("${kafka.server.port}")
-//  private String port;
-  
   @Value("${spring.kafka.bootstrap-servers}")
   private String host;
     
-  /** Crea una instancia de esta clase. */
+  /** Se crea el topico. */
   @Bean
   public NewTopic topicCustomer() {
   
@@ -41,16 +35,13 @@ public class CustomerTopic {
     
   }
 
-  /** Crea una instancia de esta clase. */
+  /** Se crea el topico. */
   @Bean
   public ProducerFactory<String, Object> producerFactory() {
   
     Map<String, Object> config = new HashMap<>();
   
-//    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, hostName + ":" + port);
-  
-//    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
-    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.0.106:29092");
+    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
     
     config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
   
@@ -60,7 +51,7 @@ public class CustomerTopic {
   
   }
   
-  /** Crea una instancia de esta clase. */
+  /** Se crea el topico. */
   @Bean
   public KafkaTemplate<String, Object> kafkaTemplate() {
   

@@ -29,24 +29,13 @@ public class CustomerController {
   
   /** Listado de clientes. */
   @GetMapping
-  public Mono<ResponseEntity<List<Customer>>> findAll() { 
-  
-    return service.findAll()
-        .collectList()
-        .flatMap(list -> {
-          
-          return list.size() > 0 
-              ?
-                  Mono.just(ResponseEntity
-                      .ok()
-                      .contentType(MediaType.APPLICATION_JSON)
-                      .body(list))
-              :
-                  Mono.just(ResponseEntity
-                      .noContent()
-                      .build());
-          
-        });
+  public Mono<ResponseEntity<List<Customer>>> findAll() {
+    
+    return service.findAllCustomer()
+        .map(objectFound -> ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(objectFound));
   
   }
   
