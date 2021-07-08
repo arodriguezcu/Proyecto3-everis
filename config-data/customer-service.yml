@@ -36,6 +36,7 @@ eureka:
 msg:
   error:
     registro:
+      notfound.all: CLIENTES NO ENCONTRADOS 
       notfound: CLIENTE NO IDENTIFICADO
       notfound.create: CLIENTE NO SE PUDO CREAR
       if.exists: CLIENTE YA EXISTE
