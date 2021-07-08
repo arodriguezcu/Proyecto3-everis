@@ -14,13 +14,15 @@
 #      defaultZone: http://eureka-server-az.azurewebsites.net/
 
 server:
-  port: 80
+#  port: 80
+  port: 8761
 management:
   server:
     port: ${server.port}
 eureka:
   instance:
-    hostname: az-eureka-server.azurewebsites.net
+#    hostname: az-eureka-server.azurewebsites.net
+    hostname: localhost
     secure-port-enabled: true
     nonSecurePort: 80
     securePort: 443
