@@ -49,7 +49,8 @@ public class CustomerTopic {
   
 //    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, hostName + ":" + port);
   
-    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
+//    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
+    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "52.255.82.239:9092");
     
     config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
   
