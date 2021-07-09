@@ -1,32 +1,38 @@
 server:
   port: 8096
-#  hostname: localhost
-  hostname: 192.168.0.106
+#  port: 80
+  hostname: localhost
+#  hostname: 192.168.0.106
   
 spring:
   application:
     name: deposit-service
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:27017/db_deposit
-      uri: mongodb://mongo:27017/db_deposit
+      uri: mongodb://arodriguezcu:WoZiG7Enr4sZXJsPA6J1yAICIAeGAzczurFJNm8k3q0apmZjMRPlAdHKqoA4vCnXvwLT40VxnskXjU6AwznsuA==@arodriguezcu.mongo.cosmos.azure.com:10255/db_deposit?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@arodriguezcu@
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 
 kafka:
   server:
-    hostname: ${server.hostname}
-    port: 29092
+#    hostname: ${server.hostname}
+    hostname: 20.94.153.173
+    port: 9092
+#    port: 29092
+#    port: 80
 
 eureka:
   client:
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:80/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-    hostname: ${server.hostname}
+#    hostname: ${server.hostname}
+    hostname: az-eureka-server.azurewebsites.net
       
 topic:
   name: deposit-topic
@@ -35,9 +41,16 @@ topic:
             
 msg:
   error:
-    registro:
-      notfound: ID DE DEPOSITO NO ENCONTRADO
-      notfound.update: ID DE DEPOSITO NO ENCONTRADO PARA ACTUALIZAR
+    registro:      
+      notfound.all: DEPOSITOS NO IDENTIFICADOS
+      notfound: DEPOSITO NO IDENTIFICADO
+      notfound.create: DEPOSITO NO SE PUDO CREAR
+      positive: MONTO DEBE SER POSITIVO
+      account.exists: NUMERO DE CUENTA NO EXISTE
+      card.exists: NUMERO DE TARJETA NO EXISTE
+      notfound.update: DEPOSITO NO IDENTIFICADO PARA ACTUALIZAR
+      notfound.delete: DEPOSITO NO IDENTIFICADO PARA ELIMINAR
+      deposit.delete: DEPOSITO ELIMINADO
 
 resilience4j:
   circuitbreaker:
