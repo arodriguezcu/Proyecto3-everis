@@ -1,7 +1,7 @@
 server:
-#  port: 8091
-  port: 80
-#  hostname: localhost
+  port: 8091
+#  port: 80
+  hostname: localhost
 #  hostname: 192.168.0.106
   
 spring:
@@ -24,20 +24,25 @@ kafka:
 eureka:
   client:
     service-url:
-#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-#    hostname: ${server.hostname}
-    hostname: az-eureka-server.azurewebsites.net
+    hostname: ${server.hostname}
+#    hostname: az-eureka-server.azurewebsites.net
             
 msg:
   error:
     registro:
-      notfound: PRODCUTO NO IDENTIFICADO
+      notfound.all: PRODUCTOS NO ENCONTRADOS
+      notfound: PRODUCTO NO IDENTIFICADO
+      notfound.create: PRODUCTO NO SE PUDO CREAR
+      if.exists: PRODUCTO YA EXISTE
       notfound.update: PRODUCTO NO IDENTIFICADO PARA ACTUALIZAR
+      notfound.delete: CLIENTE NO IDENTIFICADO PARA ELIMINAR
+      product.delete: CLIENTE ELIMINADO
 
 resilience4j:
   circuitbreaker:
