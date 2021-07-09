@@ -43,7 +43,7 @@ msg:
       if.exists: CUENTA YA EXISTE
       notfound.update: CUENTA NO IDENTIFICADA PARA ACTUALIZAR
       notfound.delete: CUENTA NO IDENTIFICADA PARA ELIMINAR
-      product.delete: CUENTA ELIMINADA
+      account.delete: CUENTA ELIMINADA
 
 resilience4j:
   circuitbreaker:
