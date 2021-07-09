@@ -43,6 +43,7 @@ msg:
   error:
     registro:
       notfound.all: PURCHASES NO ENCONTRADOS
+      product.all: PRODUCTS NO ENCONTRADOS
       notfound: PURCHASE NO IDENTIFICADO
       notfound.update: PURCHASE NO IDENTIFICADO PARA ACTUALIZAR
       notfound.delete: PURCHASE NO IDENTIFICADO PARA ELIMINAR
