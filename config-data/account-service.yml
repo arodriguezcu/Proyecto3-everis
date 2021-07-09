@@ -41,6 +41,7 @@ msg:
       notfound: CUENTA NO IDENTIFICADA
       notfound.create: CUENTA NO SE PUDO CREAR
       if.exists: CUENTA YA EXISTE
+      card.notexists: NUMERO DE TARJETA NO EXISTE
       notfound.update: CUENTA NO IDENTIFICADA PARA ACTUALIZAR
       notfound.delete: CUENTA NO IDENTIFICADA PARA ELIMINAR
       account.delete: CUENTA ELIMINADA
