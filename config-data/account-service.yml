@@ -1,7 +1,7 @@
 server:
-#  port: 8094
-  port: 80
-#  hostname: localhost
+  port: 8094
+#  port: 80
+  hostname: localhost
 #  hostname: 192.168.0.106
   
 spring:
@@ -25,7 +25,8 @@ eureka:
   client:
     service-url:
 #      defaultZone: http://${eureka.instance.hostname}:8761/eureka
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:80/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
@@ -36,8 +37,13 @@ eureka:
 msg:
   error:
     registro:
+      notfound.all: CUENTAS NO ENCONTRADAS
       notfound: CUENTA NO IDENTIFICADA
+      notfound.create: CUENTA NO SE PUDO CREAR
+      if.exists: CUENTA YA EXISTE
       notfound.update: CUENTA NO IDENTIFICADA PARA ACTUALIZAR
+      notfound.delete: CUENTA NO IDENTIFICADA PARA ELIMINAR
+      product.delete: CUENTA ELIMINADA
 
 resilience4j:
   circuitbreaker:
