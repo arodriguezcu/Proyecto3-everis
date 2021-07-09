@@ -37,7 +37,7 @@ eureka:
 msg:
   error:
     registro:
-      notfound.all: CUENTAS NO ENCONTRADAS
+      notfound.all: CUENTAS NO IDENTIFICADAS
       notfound: CUENTA NO IDENTIFICADA
       notfound.create: CUENTA NO SE PUDO CREAR
       if.exists: CUENTA YA EXISTE
