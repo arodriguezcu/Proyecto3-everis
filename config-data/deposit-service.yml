@@ -41,16 +41,13 @@ topic:
             
 msg:
   error:
-    registro:      
+    registro:
       notfound.all: DEPOSITOS NO IDENTIFICADOS
       notfound: DEPOSITO NO IDENTIFICADO
       notfound.create: DEPOSITO NO SE PUDO CREAR
       positive: MONTO DEBE SER POSITIVO
       account.exists: NUMERO DE CUENTA NO EXISTE
       card.exists: NUMERO DE TARJETA NO EXISTE
-      notfound.update: DEPOSITO NO IDENTIFICADO PARA ACTUALIZAR
-      notfound.delete: DEPOSITO NO IDENTIFICADO PARA ELIMINAR
-      deposit.delete: DEPOSITO ELIMINADO
 
 resilience4j:
   circuitbreaker:
