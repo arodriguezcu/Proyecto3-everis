@@ -43,7 +43,6 @@ msg:
   error:
     registro:
       notfound.all: DEPOSITOS NO IDENTIFICADOS
-      notfound: DEPOSITO NO IDENTIFICADO
       notfound.create: DEPOSITO NO SE PUDO CREAR
       positive: MONTO DEBE SER POSITIVO
       account.exists: NUMERO DE CUENTA NO EXISTE

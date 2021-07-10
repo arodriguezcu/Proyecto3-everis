@@ -1,32 +1,48 @@
 server:
   port: 8093
-#  hostname: localhost
-  hostname: 192.168.0.106
+#  port: 80
+  hostname: localhost
+#  hostname: 192.168.0.106
   
 spring:
   application:
     name: transaction-service
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:27017/db_transaction
-      uri: mongodb://mongo:27017/db_transaction
+      uri: mongodb://arodriguezcu:WoZiG7Enr4sZXJsPA6J1yAICIAeGAzczurFJNm8k3q0apmZjMRPlAdHKqoA4vCnXvwLT40VxnskXjU6AwznsuA==@arodriguezcu.mongo.cosmos.azure.com:10255/db_transaction?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@arodriguezcu@
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 
 kafka:
   server:
-    hostname: ${server.hostname}
-    port: 29092
+#    hostname: ${server.hostname}
+    hostname: 20.94.153.173
+    port: 9092
+#    port: 29092
+#    port: 80
 
 eureka:
   client:
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:80/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-    hostname: ${server.hostname}
+#    hostname: ${server.hostname}
+    hostname: az-eureka-server.azurewebsites.net
+
+msg:
+  error:
+    registro:
+      notfound.all: TRANSACCIONES NO IDENTIFICADAS
+      positive: MONTO DEBE SER POSITIVO
+      exceed: MONTO EXCEDE EL SALDO DISPONIBLE
+      accountini.exists: NUMERO DE CUENTA INICIAL NO EXISTE
+      accountfin.exists: NUMERO DE CUENTA FINAL NO EXISTE
+      card.exists: NUMERO DE TARJETA NO EXISTE
 
 resilience4j:
   circuitbreaker:

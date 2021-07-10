@@ -43,7 +43,6 @@ msg:
   error:
     registro:
       notfound.all: RETIROS NO IDENTIFICADOS
-      notfound: RETIRO NO IDENTIFICADO
       notfound.create: RETIRO NO SE PUDO CREAR
       positive: MONTO DEBE SER POSITIVO
       exceed: MONTO EXCEDE EL SALDO DISPONIBLE
