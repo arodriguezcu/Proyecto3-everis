@@ -46,7 +46,7 @@ msg:
       notfound: RETIRO NO IDENTIFICADO
       notfound.create: RETIRO NO SE PUDO CREAR
       positive: MONTO DEBE SER POSITIVO
-      excedd: MONTO EXCEDE EL SALDO DISPONIBLE
+      exceed: MONTO EXCEDE EL SALDO DISPONIBLE
       account.exists: NUMERO DE CUENTA NO EXISTE
       card.exists: NUMERO DE TARJETA NO EXISTE
             
