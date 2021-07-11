@@ -1,16 +1,16 @@
 server:
   port: 8092
 #  port: 80
-#  hostname: localhost
-  hostname: 192.168.0.106
+  hostname: localhost
+#  hostname: 192.168.0.106
   
 spring:
   application:
     name: purchase-service
   data:
     mongodb:    
-      uri: mongodb://mongo/db_purchase
-#      uri: mongodb://arodriguezcu:WoZiG7Enr4sZXJsPA6J1yAICIAeGAzczurFJNm8k3q0apmZjMRPlAdHKqoA4vCnXvwLT40VxnskXjU6AwznsuA==@arodriguezcu.mongo.cosmos.azure.com:10255/db_purchase?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@arodriguezcu@
+#      uri: mongodb://mongo/db_purchase
+      uri: mongodb://arodriguezcu:WoZiG7Enr4sZXJsPA6J1yAICIAeGAzczurFJNm8k3q0apmZjMRPlAdHKqoA4vCnXvwLT40VxnskXjU6AwznsuA==@arodriguezcu.mongo.cosmos.azure.com:10255/db_purchase?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@arodriguezcu@
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 
@@ -45,7 +45,18 @@ msg:
     registro:
       notfound.all: PURCHASES NO ENCONTRADOS
       product.all: PRODUCTS NO ENCONTRADOS
-      notfound: PURCHASE NO IDENTIFICADO
+      notfound: PURCHASE NO IDENTIFICADO      
+      notfound.create: PURCHASE NO SE PUDO CREAR
+      product.exists: PRODUCTO NO EXISTE
+      card.exists: NUMERO DE TARJETA YA EXISTE
+      positive: MONTO DEBE SER POSITIVO
+      customer.exists: CLIENTES NO EXISTEN
+      owners: TITULARES DEBEN SER EL MISMO TIPO DE CLIENTE (PERSONAL O EMPRESARIAL)
+      business.owner: CLIENTE EMPRESARIAL MAXIMO 1 TITULAR
+      minimum.owner: MINIMO 1 TITULAR
+      product.available: CLIENTE YA CUENTA CON EL PRODUCTO
+      credit.card: NECESITA UNA TARJETA DE CREDITO
+      product.business: CLIENTE EMPRESARIAL NO PUEDE OBTENER EL PRODUCTO      
       notfound.update: PURCHASE NO IDENTIFICADO PARA ACTUALIZAR
       notfound.delete: PURCHASE NO IDENTIFICADO PARA ELIMINAR
       purchase.delete: PURCHASE ELIMINADO
