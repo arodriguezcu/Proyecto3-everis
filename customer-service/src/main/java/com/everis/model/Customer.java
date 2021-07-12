@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
- * Omitir campos que son nulos.
+ * Clase Customer.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Document(collection = "customer")

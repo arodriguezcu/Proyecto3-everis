@@ -4,12 +4,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
+/**
+ * Configuracion del Servicio y Eureka.
+ */
 @SpringBootApplication
 @EnableEurekaClient
 public class CreditConsumerServiceApplication {
 
+  /** Principal. */
   public static void main(String[] args) {
-  SpringApplication.run(CreditConsumerServiceApplication.class, args);
+  
+    SpringApplication.run(CreditConsumerServiceApplication.class, args);
+  
   }
 
 }

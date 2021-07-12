@@ -1,79 +1,83 @@
 package com.everis.topic.consumer;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Component;
-
 import com.everis.model.Account;
 import com.everis.model.Deposit;
 import com.everis.model.Purchase;
-import com.everis.service.IAccountService;
-import com.everis.service.IDepositService;
-import com.everis.service.IPurchaseService;
+import com.everis.service.InterfaceAccountService;
+import com.everis.service.InterfaceDepositService;
+import com.everis.service.InterfacePurchaseService;
 import com.everis.topic.producer.DepositProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 
+/**
+ * Clase Consumidor de Topicos.
+ */
 @Component
 public class DepositConsumer {
   
   @Autowired
-  private IAccountService accountService;
+  private InterfaceAccountService accountService;
   
   @Autowired
-  private IPurchaseService purchaseService;
+  private InterfacePurchaseService purchaseService;
   
   @Autowired
-  private IDepositService depositService;
+  private InterfaceDepositService depositService;
 
   @Autowired
   private DepositProducer depositProducer;
   
   ObjectMapper objectMapper = new ObjectMapper();
   
+  /** Consume del topico account. */
   @KafkaListener(topics = "created-account-topic", groupId = "deposit-group")
   public Disposable retrieveCreatedAccount(String data) throws Exception {
   
-  Account account = objectMapper.readValue(data, Account.class);
-    
-  return Mono.just(account)
-    .log()
-    .flatMap(accountService::update)
-    .subscribe();
+    Account account = objectMapper.readValue(data, Account.class);
+      
+    return Mono.just(account)
+      .log()
+      .flatMap(accountService::update)
+      .subscribe();
   
   }
   
+  /** Consume del topico purchase. */
   @KafkaListener(topics = "created-purchase-topic", groupId = "deposit-group")
   public Disposable retrieveCreatedPurchase(String data) throws Exception {
   
-  Purchase purchase = objectMapper.readValue(data, Purchase.class);
-  
-  if (purchase.getProduct().getProductType().equals("ACTIVO")) {
+    Purchase purchase = objectMapper.readValue(data, Purchase.class);
     
-    return null;
+    if (purchase.getProduct().getProductType().equals("ACTIVO")) {
       
+      return null;
+        
+    }
+    
+    return Mono.just(purchase)
+      .log()
+      .flatMap(purchaseService::update)
+      .subscribe();
+  
   }
   
-  return Mono.just(purchase)
-    .log()
-    .flatMap(purchaseService::update)
-    .subscribe();
-  
-  }
-  
+  /** Consume del topico transaction. */
   @KafkaListener(topics = "created-transfer-deposit-topic", groupId = "deposit-group")
   public Disposable retrieveCreatedDeposit(String data) throws Exception {
   
-  Deposit deposit = objectMapper.readValue(data, Deposit.class);
-  
-  depositProducer.sendDepositAccountTopic(deposit);
-  
-  return Mono.just(deposit)
-    .log()
-    .flatMap(depositService::update)
-    .subscribe();
+    Deposit deposit = objectMapper.readValue(data, Deposit.class);
+    
+    depositProducer.sendDepositAccountTopic(deposit);
+    
+    return Mono.just(deposit)
+      .log()
+      .flatMap(depositService::update)
+      .subscribe();
   
   }
   

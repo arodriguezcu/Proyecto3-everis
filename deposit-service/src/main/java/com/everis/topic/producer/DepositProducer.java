@@ -1,11 +1,13 @@
 package com.everis.topic.producer;
 
+import com.everis.model.Deposit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import com.everis.model.Deposit;
-
+/**
+ * Clase Productor del Deposit.
+ */
 @Component
 public class DepositProducer {
   
@@ -14,9 +16,10 @@ public class DepositProducer {
 
   private String depositAccountTopic = "created-deposit-topic";
 
+  /** Envia datos del deposito al topico. */
   public void sendDepositAccountTopic(Deposit deposit) {
   
-  kafkaTemplate.send(depositAccountTopic, deposit);
+    kafkaTemplate.send(depositAccountTopic, deposit);
   
   }
   

@@ -7,10 +7,10 @@ services:
     build: .
     ports:
        - "8098:8098"
-    links:
-      - mongo
-  mongo:
-    container_name: payment-db
-    image: mongo
-    ports:
-      - "27028:27017"
+#    links:
+#      - mongo
+#  mongo:
+#    container_name: db_payment
+#    image: mongo
+#    ports:
+#      - "27028:27020"

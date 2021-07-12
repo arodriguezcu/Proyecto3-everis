@@ -3,7 +3,6 @@ package com.everis.controller;
 import com.everis.dto.Response;
 import com.everis.model.Product;
 import com.everis.service.InterfaceProductService;
-import com.everis.topic.producer.ProductProducer;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,49 +15,23 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * 
+ * Controlador del Product.
  */
 @RestController
 @RequestMapping("/product")
 public class ProductController {
   
   @Autowired
-  private ProductProducer producer;
-  
-  @Autowired
   private InterfaceProductService service;
   
-  /** */
+  /** Metodo para listar todos los productos. */
   @GetMapping  
   public Mono<ResponseEntity<List<Product>>> findAll() { 
     
-    return service.findAll()
-        .collectList()
-        .flatMap(list -> {
-          return list.size() > 0 
-              ?
-                  Mono.just(ResponseEntity
-                      .ok()
-                      .contentType(MediaType.APPLICATION_JSON)
-                      .body(list))
-              :
-                  Mono.just(ResponseEntity
-                      .noContent()
-                      .build());
-          
-        });
-  
-  }
-  
-  /** */
-  @GetMapping("/{id}")
-  public Mono<ResponseEntity<Product>> findById(@PathVariable("id") String id) {
-    
-    return service.findById(id)
+    return service.findAllProduct()
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
@@ -66,47 +39,32 @@ public class ProductController {
   
   }
   
-  /** */
-  @PostMapping
-  public Mono<ResponseEntity<Response>> create(@RequestBody Product product) {
+  /** Metodo para buscar producto por nombre. */
+  @GetMapping("/{productName}")
+  public Mono<ResponseEntity<Product>> findByProductName(@PathVariable("productName") 
+      String productName) {
     
-    Flux<Product> productDatabase = service.findAll()
-        .filter(list -> list.getProductName().equals(product.getProductName()));
-        
-    return productDatabase
-        .collectList()
-        .flatMap(list -> {
-          
-          if (list.size() > 0) {
-            
-            return Mono.just(ResponseEntity
-                .badRequest()
-                .body(Response
-                    .builder()
-                    .data("El producto " + product.getProductName() + " ya existe")
-                    .build()));      
-          }
-      
-          return service.create(product)
-              .map(createdObject -> {
-                
-                producer.sendSavedProductTopic(createdObject);
-        
-                return ResponseEntity
-                    .ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(Response
-                        .builder()
-                        .data(createdObject)
-                        .build());
-                
-              });      
-    
-        });
+    return service.findByProductName(productName)
+        .map(objectFound -> ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(objectFound));
   
   }
   
-  /** */
+  /** Metodo para crear producto. */
+  @PostMapping
+  public Mono<ResponseEntity<Product>> create(@RequestBody Product product) {
+        
+    return service.createProduct(product)
+        .map(objectFound -> ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(objectFound));
+  
+  }
+  
+  /** Metodo para actualizar producto. */
   @PutMapping("/{productName}")
   public Mono<ResponseEntity<Product>> update(@RequestBody 
       Product product, @PathVariable("productName") String productName) {
@@ -115,34 +73,19 @@ public class ProductController {
         .map(objectFound -> ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(objectFound)
-        );
+                .body(objectFound));
   
   }
   
-  /** */
+  /** Metodo para eliminar producto por nombre. */
   @DeleteMapping("/{productName}")
   public Mono<ResponseEntity<Response>> delete(@PathVariable("productName") String productName) {
     
-    return service.findByProductName(productName)
-        .flatMap(objectDelete -> {
-          
-          return service.delete(objectDelete.getId())
-              .then(Mono.just(ResponseEntity
-                  .ok()
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .body(Response
-                      .builder()
-                      .data("El producto " + productName + " ha sido eliminado")
-                      .build())));
-          
-        })
-        .defaultIfEmpty(ResponseEntity
-            .badRequest()
-            .body(Response
-                .builder()
-                .data("El producto no existe")
-                .build()));
+    return service.deleteProduct(productName)
+        .map(objectFound -> ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(objectFound));
   
   }
   

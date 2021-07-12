@@ -1,25 +1,25 @@
 package com.everis.topic.consumer;
 
-import java.time.LocalDateTime;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Component;
-
 import com.everis.model.Account;
 import com.everis.model.CreditConsumer;
 import com.everis.model.CreditPayment;
 import com.everis.model.Deposit;
 import com.everis.model.Transaction;
 import com.everis.model.Withdrawal;
-import com.everis.service.IAccountService;
-import com.everis.service.ITransactionService;
+import com.everis.service.InterfaceAccountService;
+import com.everis.service.InterfaceTransactionService;
 import com.everis.topic.producer.TransactionProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import java.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 
+/**
+ * Clase Consumidor de Topicos.
+ */
 @Component
 public class TransactionConsumer {
   
@@ -27,14 +27,15 @@ public class TransactionConsumer {
   private ObjectMapper objectMapper;
   
   @Autowired
-  private ITransactionService transactionService;
+  private InterfaceTransactionService transactionService;
 
   @Autowired
-  private IAccountService accountService;
+  private InterfaceAccountService accountService;
     
   @Autowired
   private TransactionProducer producer;
 
+  /** Consume del topico account. */
   @KafkaListener(topics = "created-account-topic", groupId = "transaction-group")
   public Disposable retrieveCreatedAccount(String data) throws Exception {
   
@@ -47,6 +48,7 @@ public class TransactionConsumer {
   
   }
 
+  /** Consume del topico withdrawal. */
   @KafkaListener(topics = "created-withdrawal-topic", groupId = "transaction-group")
   public Disposable retrieveCreatedWithdrawal(String data) throws Exception {
   
@@ -59,7 +61,8 @@ public class TransactionConsumer {
         
         Double commissionFin = withdrawal.getAmount();
         
-        if (withdrawal.getPurchase().getProduct().getCondition().getMonthlyTransactionLimit().equals(0)) {
+        if (withdrawal.getPurchase().getProduct().getCondition()
+            .getMonthlyTransactionLimit().equals(0)) {
           
           int cantidad = (int) Math.round(w.getAmount() / 100);
           
@@ -101,6 +104,7 @@ public class TransactionConsumer {
   
   }
 
+  /** Consume del topico deposit. */
   @KafkaListener(topics = "created-deposit-topic", groupId = "transaction-group")
   public Disposable retrieveCreatedDeposit(String data) throws Exception {
   
@@ -113,7 +117,8 @@ public class TransactionConsumer {
           
           Double commissionFin = deposit.getAmount();
           
-          if (deposit.getPurchase().getProduct().getCondition().getMonthlyTransactionLimit().equals(0)) {
+          if (deposit.getPurchase().getProduct().getCondition()
+              .getMonthlyTransactionLimit().equals(0)) {
             
             int cantidad = (int) Math.round(d.getAmount() / 100);
             
@@ -157,55 +162,57 @@ public class TransactionConsumer {
   
   }
 
+  /** Consume del topico credit-consumer. */
   @KafkaListener(topics = "created-credit-consumer-topic", groupId = "transaction-group")
   public Disposable retrieveCreatedCreditConsumer(String data) throws Exception {
   
-  CreditConsumer creditConsumer = objectMapper.readValue(data, CreditConsumer.class);
-  
-  return Mono.just(creditConsumer)
-    .map(c -> {
-      return transactionService
-        .create(Transaction
-          .builder()
-          .purchase(c.getPurchase())
-          .description(c.getDescription())
-          .transactionType("CONSUMO TARJETA CREDITO")
-          .transactionAmount(c.getAmount())
-          .transactionDate(c.getConsumDate())
-          .build())
-        .block();
-    })
-    .flatMap(a -> {
-      producer.sendCreatedTransactionTopic(a);
-      return Mono.just(a);
-    })
-    .subscribe();
+    CreditConsumer creditConsumer = objectMapper.readValue(data, CreditConsumer.class);
+    
+    return Mono.just(creditConsumer)
+      .map(c -> {
+        return transactionService
+          .create(Transaction
+            .builder()
+            .purchase(c.getPurchase())
+            .description(c.getDescription())
+            .transactionType("CONSUMO TARJETA CREDITO")
+            .transactionAmount(c.getAmount())
+            .transactionDate(c.getConsumDate())
+            .build())
+          .block();
+      })
+      .flatMap(a -> {
+        producer.sendCreatedTransactionTopic(a);
+        return Mono.just(a);
+      })
+      .subscribe();
   
   }
 
+  /** Consume del topico credit-payment. */
   @KafkaListener(topics = "created-credit-payment-topic", groupId = "transaction-group")
   public Disposable retrieveCreatedCreditPayment(String data) throws Exception {
   
-  CreditPayment creditPayment = objectMapper.readValue(data, CreditPayment.class);
-  
-  return Mono.just(creditPayment)
-    .map(p -> {
-      return transactionService
-        .create(Transaction
-          .builder()
-          .purchase(p.getPurchase())
-          .description(p.getDescription())
-          .transactionType("PAGO TARJETA CREDITO")
-          .transactionAmount(p.getAmount())
-          .transactionDate(p.getPaymentDate())
-          .build())
-        .block();
-    })
-    .flatMap(a -> {
-      producer.sendCreatedTransactionTopic(a);
-      return Mono.just(a);
-    })
-    .subscribe();
+    CreditPayment creditPayment = objectMapper.readValue(data, CreditPayment.class);
+    
+    return Mono.just(creditPayment)
+      .map(p -> {
+        return transactionService
+          .create(Transaction
+            .builder()
+            .purchase(p.getPurchase())
+            .description(p.getDescription())
+            .transactionType("PAGO TARJETA CREDITO")
+            .transactionAmount(p.getAmount())
+            .transactionDate(p.getPaymentDate())
+            .build())
+          .block();
+      })
+      .flatMap(a -> {
+        producer.sendCreatedTransactionTopic(a);
+        return Mono.just(a);
+      })
+      .subscribe();
   
   }
   

@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * 
+ * Implementacion del CRUD. 
  */
 public abstract class CrudServiceImpl<T, K> implements InterfaceCrudService<T, K> {
   

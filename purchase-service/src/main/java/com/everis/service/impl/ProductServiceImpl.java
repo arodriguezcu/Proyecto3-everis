@@ -1,32 +1,34 @@
 package com.everis.service.impl;
 
+import com.everis.model.Product;
+import com.everis.repository.InterfaceProductRepository;
+import com.everis.repository.InterfaceRepository;
+import com.everis.service.InterfaceProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.everis.model.Product;
-import com.everis.repository.IProductRepository;
-import com.everis.repository.IRepository;
-import com.everis.service.IProductService;
-
 import reactor.core.publisher.Mono;
 
+/**
+ * Implementacion de los Metodos del Producto.
+ */
 @Service
-public class ProductServiceImpl extends CRUDServiceImpl<Product, String> implements IProductService {
+public class ProductServiceImpl extends CrudServiceImpl<Product, String> 
+        implements InterfaceProductService {
 
   @Autowired
-  private IProductRepository repository;
+  private InterfaceProductRepository repository;
 
   @Override
-  protected IRepository<Product, String> getRepository() {
+  protected InterfaceRepository<Product, String> getRepository() {
 
-  return repository;
+    return repository;
 
   }
 
   @Override
   public Mono<Product> findByProductName(String productName) {
   
-  return repository.findByProductName(productName);
+    return repository.findByProductName(productName);
   
   }
 

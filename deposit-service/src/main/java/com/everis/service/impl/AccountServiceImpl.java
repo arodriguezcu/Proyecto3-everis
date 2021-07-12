@@ -1,32 +1,34 @@
 package com.everis.service.impl;
 
+import com.everis.model.Account;
+import com.everis.repository.InterfaceAccountRepository;
+import com.everis.repository.InterfaceRepository;
+import com.everis.service.InterfaceAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.everis.model.Account;
-import com.everis.repository.IAccountRepository;
-import com.everis.repository.IRepository;
-import com.everis.service.IAccountService;
-
 import reactor.core.publisher.Mono;
 
+/**
+ * Implementacion de Metodos del Service Account.
+ */
 @Service
-public class AccountServiceImpl extends CRUDServiceImpl<Account, String> implements IAccountService {
+public class AccountServiceImpl extends CrudServiceImpl<Account, String> 
+    implements InterfaceAccountService {
   
   @Autowired
-  private IAccountRepository repository;
+  private InterfaceAccountRepository repository;
   
   @Override
-  protected IRepository<Account, String> getRepository() {
+  protected InterfaceRepository<Account, String> getRepository() {
   
-  return repository;
+    return repository;
   
   }
 
   @Override
   public Mono<Account> findByAccountNumber(String accountNumber) {
   
-  return repository.findByAccountNumber(accountNumber);
+    return repository.findByAccountNumber(accountNumber);
   
   }
 

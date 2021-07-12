@@ -1,7 +1,12 @@
 package com.everis.controller;
 
+import com.everis.dto.Response;
+import com.everis.model.Transaction;
+import com.everis.model.Transfer;
+import com.everis.model.Withdrawal;
+import com.everis.service.InterfaceTransactionService;
+import com.everis.service.InterfaceTransferService;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,108 +16,63 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.everis.dto.Response;
-import com.everis.model.Transaction;
-import com.everis.model.Transfer;
-import com.everis.service.ITransactionService;
-import com.everis.service.ITransferService;
-
 import reactor.core.publisher.Mono;
 
+/**
+ * Controlador del Transaction.
+ */
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
    
   @Autowired
-  private ITransactionService service;
+  private InterfaceTransactionService service;
   
   @Autowired
-  private ITransferService transferService;
+  private InterfaceTransferService transferService;
   
+  /** Metodo para listar todas las transacciones. */ 
   @GetMapping
-  public Mono<ResponseEntity<List<Transaction>>> findAll(){ 
-  
-  return service.findAll()
-    .collectList()
-    .flatMap(list -> {
-      return list.size() > 0 ? 
-        Mono.just(ResponseEntity
-          .ok()
-          .contentType(MediaType.APPLICATION_JSON)
-          .body(list)) :
-        Mono.just(ResponseEntity
-          .noContent()
-          .build());
-    });
+  public Mono<ResponseEntity<List<Transaction>>> findAll() { 
+      
+    return service.findAllTransaction()
+        .map(objectFound -> ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(objectFound));
     
   }
-  
+
+  /** Metodo para listar todas las transacciones por numero de tarjeta. */ 
   @GetMapping("/{cardNumber}")
-  public Mono<ResponseEntity<Response>> findAllByCardNumber(@PathVariable("cardNumber") String cardNumber) { 
+  public Mono<ResponseEntity<List<Transaction>>> findAllByCardNumber(@PathVariable("cardNumber") 
+      String cardNumber) { 
   
-    return service.findAll().filter(list -> list.getPurchase().getCardNumber().equals(cardNumber))
-        .collectList()
-        .flatMap(list -> {
-        
-          return list.size() > 0 
-              ?
-                  Mono.just(ResponseEntity
-                      .ok()
-                      .contentType(MediaType.APPLICATION_JSON)
-                      .body(Response
-                          .builder()
-                          .data(list)
-                          .build()))
-              :
-                  Mono.just(ResponseEntity
-                      .badRequest()
-                      .body(Response
-                          .builder()
-                          .error("El numero de tarjeta " + cardNumber + " no existe.")
-                          .build()));
-          
-      });
+    return service.findAllByCardNumber(cardNumber)
+        .map(objectFound -> ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(objectFound));
     
   }
   
-  //Implementar un reporte con los últimos 10 movimientos de la tarjeta de débito y de crédito.
+  /** Metodo para listar los ultimos 10 transacciones por numero de tarjeta. */
   @GetMapping("list10/{cardNumber}")
-  public Mono<ResponseEntity<Response>> findTop10ByCardNumber(@PathVariable("cardNumber") String cardNumber) { 
+  public Mono<ResponseEntity<List<Transaction>>> findTop10ByCardNumber(@PathVariable("cardNumber") 
+      String cardNumber) { 
   
-    return service.findAll().filter(list -> list.getPurchase().getCardNumber().equals(cardNumber))
-        .takeLast(10)
-        .collectList()
-        .flatMap(list -> {
-        
-          return list.size() > 0 
-              ?
-                  Mono.just(ResponseEntity
-                      .ok()
-                      .contentType(MediaType.APPLICATION_JSON)
-                      .body(Response
-                          .builder()
-                          .data(list)
-                          .build()))
-              :
-                  Mono.just(ResponseEntity
-                      .badRequest()
-                      .body(Response
-                          .builder()
-                          .error("El numero de tarjeta " + cardNumber + " no existe.")
-                          .build()));
-          
-      });
+    return service.findTop10ByCardNumber(cardNumber)
+        .map(objectFound -> ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(objectFound));
     
   }
   
-  //Consultar el saldo de la cuenta principal asociada a la tarjeta de débito
+  /** Consultar el saldo de la cuenta principal asociada a la tarjeta de débito. */
   @GetMapping("current-balance/{cardNumber}")
   public Mono<Object> currentBalance(@PathVariable("cardNumber") String cardNumber) { 
-  
-    /*return service.findAll().filter(list -> list.getPurchase().getCardNumber().equals(cardNumber))
-            .takeLast(1);*/
-    
+      
     return service.findAll().filter(list -> list.getPurchase().getCardNumber().equals(cardNumber))
         .takeLast(1)
         .collectList()
@@ -134,52 +94,33 @@ public class TransactionController {
                           .builder()
                           .error("El numero de tarjeta " + cardNumber + " no existe.")
                           .build()));
-          
-      });
+                
+        });
     
   }
   
+  /** Metodo para listar todas las comisiones por numero de tarjeta. */ 
   @GetMapping("/commission/{cardNumber}")
-  public Mono<ResponseEntity<Response>> findAllByCommission(@PathVariable("cardNumber") String cardNumber) { 
+  public Mono<ResponseEntity<List<Transaction>>> findAllByCommission(@PathVariable("cardNumber") 
+      String cardNumber) { 
   
-    return service.findAll()
-        .filter(list -> list.getPurchase().getCardNumber().equals(cardNumber))
-        .filter(list -> list.getCommission() > 0)
-        .collectList()
-        .flatMap(list -> {
-        
-          return list.size() > 0 
-              ?
-                  Mono.just(ResponseEntity
-                      .ok()
-                      .contentType(MediaType.APPLICATION_JSON)
-                      .body(Response
-                          .builder()
-                          .data(list)
-                          .build()))
-              :
-                  Mono.just(ResponseEntity
-                      .badRequest()
-                      .body(Response
-                          .builder()
-                          .error("El numero de tarjeta " + cardNumber + " no existe.")
-                          .build()));
-          
-      });
-    
-  }
-  
-  @PostMapping
-  public Mono<ResponseEntity<Response>> createTransfer(@RequestBody Transfer transfer) {
-    
-    return transferService.createTransfer(transfer)
-        .map(objectCreate -> ResponseEntity
+    return service.findAllByCommission(cardNumber)
+        .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(Response
-                .builder()
-                .data(objectCreate)
-                .build()));
+            .body(objectFound));
+    
+  }
+  
+  /** Metodo para crear una transferencia. */ 
+  @PostMapping
+  public Mono<ResponseEntity<Withdrawal>> createTransfer(@RequestBody Transfer transfer) {
+    
+    return transferService.createTransfer(transfer)
+        .map(objectFound -> ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(objectFound));
     
   }
   

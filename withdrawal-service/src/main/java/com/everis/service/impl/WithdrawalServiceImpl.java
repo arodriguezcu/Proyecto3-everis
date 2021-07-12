@@ -1,51 +1,174 @@
 package com.everis.service.impl;
 
+import com.everis.model.Account;
+import com.everis.model.Purchase;
+import com.everis.model.Withdrawal;
+import com.everis.repository.InterfaceRepository;
+import com.everis.repository.InterfaceWithdrawalRepository;
+import com.everis.service.InterfaceAccountService;
+import com.everis.service.InterfacePurchaseService;
+import com.everis.service.InterfaceWithdrawalService;
+import com.everis.topic.producer.WithdrawalProducer;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.everis.model.Withdrawal;
-import com.everis.repository.IRepository;
-import com.everis.repository.IWithdrawalRepository;
-import com.everis.service.IWithdrawalService;
-
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Implementacion de Metodos del Service Withdrawal.
+ */
 @Slf4j
 @Service
-public class WithdrawalServiceImpl extends CRUDServiceImpl<Withdrawal, String> implements IWithdrawalService {
+public class WithdrawalServiceImpl extends CrudServiceImpl<Withdrawal, String> 
+    implements InterfaceWithdrawalService {
 
-  private final String CIRCUIT_BREAKER = "accountServiceCircuitBreaker";
+  private final String circuitBreaker = "withdrawalServiceCircuitBreaker";
   
-  @Value("${msg.error.registro.notfound}")
-  private String msgNotFound;
+  @Value("${msg.error.registro.notfound.all}")
+  public String msgNotFoundAll;
   
-  @Value("${msg.error.registro.notfound.update}")
-  private String msgNotFoundUpdate;
+  @Value("${msg.error.registro.positive}")
+  public String msgPositive;
+  
+  @Value("${msg.error.registro.exceed}")
+  public String msgExceed;
+  
+  @Value("${msg.error.registro.account.exists}")
+  public String msgAccountNotExists;
+  
+  @Value("${msg.error.registro.card.exists}")
+  public String msgCardNotExists;
+  
+  @Value("${msg.error.registro.notfound.create}")
+  public String msgNotFoundCreate;
   
   @Autowired
-  private IWithdrawalRepository repository;
+  private InterfaceWithdrawalRepository repository;
+  
+  @Autowired
+  private InterfaceWithdrawalService service;
+  
+  @Autowired
+  private InterfacePurchaseService purchaseService;
+  
+  @Autowired
+  private InterfaceAccountService accountService;
+  
+  @Autowired
+  private WithdrawalProducer producer;
 
   @Override
-  protected IRepository<Withdrawal, String> getRepository() {
+  protected InterfaceRepository<Withdrawal, String> getRepository() {
+    
     return repository;
+  
   }
   
   @Override
-  @CircuitBreaker(name = CIRCUIT_BREAKER, fallbackMethod = "findByIdWithdrawalFallback")
-  public Mono<Withdrawal> findByIdWithdrawal(String id) {
-      return repository.findById(id)
-              .switchIfEmpty( Mono.error(new RuntimeException(msgNotFound) ) );
+  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "findAllFallback")
+  public Mono<List<Withdrawal>> findAllWithdrawal() {
+    
+    Flux<Withdrawal> withdrawalDatabase = service.findAll()
+        .switchIfEmpty(Mono.error(new RuntimeException(msgNotFoundAll)));
+    
+    return withdrawalDatabase.collectList().flatMap(Mono::just);
+  
   }
   
-  public Mono<Withdrawal> findByIdWithdrawalFallback(String id, Exception ex) {
+  @Override
+  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "createFallback")
+  public Mono<Withdrawal> createWithdrawal(Withdrawal withdrawal) {
+    
+    Mono<Purchase> purchaseDatabase = purchaseService
+        .findByCardNumber(withdrawal.getPurchase().getCardNumber())
+        .switchIfEmpty(Mono.error(new RuntimeException(msgCardNotExists)));
+    
+    Mono<Account> accountDatabase = accountService
+        .findByAccountNumber(withdrawal.getAccount().getAccountNumber())
+        .switchIfEmpty(Mono.error(new RuntimeException(msgAccountNotExists)));
+    
+    return purchaseDatabase
+        .flatMap(purchase -> {
+        
+          return accountDatabase
+              .flatMap(account -> {
+            
+                if (withdrawal.getAmount() < 0) {
+                  
+                  return Mono.error(new RuntimeException(msgPositive));
+                  
+                }
+                
+                if (withdrawal.getAmount() > account.getCurrentBalance()) {
+                  
+                  return Mono.error(new RuntimeException(msgExceed));
+                  
+                }
+                
+                account.setCurrentBalance(account.getCurrentBalance() - withdrawal.getAmount());
+                withdrawal.setAccount(account);
+                withdrawal.setPurchase(purchase);
+                withdrawal.setWithdrawalDate(LocalDateTime.now());
+                
+                producer.sendWithdrawalAccountTopic(withdrawal); 
+                
+                if (purchase.getProduct().getCondition().getMonthlyTransactionLimit() > 0) {
+                  
+                  withdrawal.getPurchase().getProduct().getCondition().setMonthlyTransactionLimit(
+                      purchase.getProduct().getCondition().getMonthlyTransactionLimit() - 1
+                  );
+                  
+                } 
+              
+                return service.create(withdrawal)
+                    .map(createdObject -> {
+                        
+                      return createdObject;
+                                      
+                    })
+                    .switchIfEmpty(Mono.error(new RuntimeException(msgNotFoundCreate)));
+                          
+              });
+                  
+        });
       
-      log.info("ups retiro con id{} no encontrado, retornando fallback",id);
-      return Mono.just(Withdrawal.builder()
-              .id(msgNotFound)
-              .build());
+  }
+  
+  /** Mensaje si no existen retiros. */
+  public Mono<List<Withdrawal>> findAllFallback(Exception ex) {
+    
+    log.info("Retiros no encontradas, retornando fallback");
+  
+    List<Withdrawal> list = new ArrayList<>();
+    
+    list.add(Withdrawal
+        .builder()
+        .id(ex.getMessage())
+        .build());
+    
+    return Mono.just(list);
+    
+  }
+  
+  /** Mensaje si falla el create. */
+  public Mono<Withdrawal> createFallback(Withdrawal withdrawal, Exception ex) {
+  
+    log.info("Retiro con numero de cuenta {} no se pudo crear, "
+        + "retornando fallback", withdrawal.getAccount().getAccountNumber());
+  
+    return Mono.just(Withdrawal
+        .builder()
+        .id(ex.getMessage())
+        .amount(Double.parseDouble(withdrawal.getPurchase().getCardNumber()))
+        .description(withdrawal.getAccount().getAccountNumber())
+        .build());
+    
   }
 
 }

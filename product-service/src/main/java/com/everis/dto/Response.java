@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 
+ * Clase Response.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data

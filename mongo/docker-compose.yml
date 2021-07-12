@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  mongodb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_USERNAME: usermongo
+      MONGO_INITDB_PASSWORD: passmongo
+      MONGO_INITDB_DATABASE: bank
+    ports:
+      - 12500:27017
+    volumes:
+      - ./mongo/:/etc/mongo
+volumes:
+  mongo: {}
+

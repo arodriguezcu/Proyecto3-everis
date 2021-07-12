@@ -15,18 +15,15 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 /**
- * 
+ * Clase Topico.
  */
 @Configuration
 public class ProductTopic {
   
-  @Value("${kafka.server.hostname}")
-  private String hostName;
+  @Value("${spring.kafka.bootstrap-servers}")
+  private String host;
   
-  @Value("${kafka.server.port}")
-  private String port;
-  
-  /** */
+  /** Creacion del Topico. */
   @Bean
   public NewTopic topicProduct() {
   
@@ -38,13 +35,13 @@ public class ProductTopic {
     
   }
 
-  /** */
+  /** Creacion del Topico. */
   @Bean
   public ProducerFactory<String, Object> producerFactory() {
   
     Map<String, Object> config = new HashMap<>();
   
-    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, hostName + ":" + port);
+    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
   
     config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
   
@@ -54,7 +51,7 @@ public class ProductTopic {
   
   }
   
-  /** */
+  /** Creacion del Topico. */
   @Bean
   public KafkaTemplate<String, Object> kafkaTemplate() {
   

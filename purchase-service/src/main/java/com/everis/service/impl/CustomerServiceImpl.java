@@ -1,31 +1,35 @@
 package com.everis.service.impl;
 
+import com.everis.model.Customer;
+import com.everis.repository.InterfaceCustomerRepository;
+import com.everis.repository.InterfaceRepository;
+import com.everis.service.InterfaceCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.everis.model.Customer;
-import com.everis.repository.ICustomerRepository;
-import com.everis.repository.IRepository;
-import com.everis.service.ICustomerService;
-
 import reactor.core.publisher.Mono;
 
+/**
+ * Implementacion de los Metodos del Cliente.
+ */
 @Service
-public class CustomerServiceImpl extends CRUDServiceImpl<Customer, String> implements ICustomerService {
+public class CustomerServiceImpl extends CrudServiceImpl<Customer, String> 
+        implements InterfaceCustomerService {
 
   @Autowired
-  private ICustomerRepository repository;
+  private InterfaceCustomerRepository repository;
 
   @Override
-  protected IRepository<Customer, String> getRepository() {
+  protected InterfaceRepository<Customer, String> getRepository() {
 
-  return repository;
+    return repository;
 
   }
 
   @Override
   public Mono<Customer> findByIdentityNumber(String identityNumber) {
-  return repository.findByIdentityNumber(identityNumber);
+  
+    return repository.findByIdentityNumber(identityNumber);
+  
   }
 
 }

@@ -1,11 +1,13 @@
 package com.everis.topic.producer;
 
+import com.everis.model.CreditPayment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import com.everis.model.CreditPayment;
-
+/**
+ * Clase Productor del Credit Payment.
+ */
 @Component
 public class CreditPaymentProducer {
   
@@ -14,11 +16,10 @@ public class CreditPaymentProducer {
 
   private String creditPaymentTransactionTopic = "created-credit-payment-topic";
 
+  /** Envia datos del pago de credito al topico. */
   public void sendCreditPaymentTransactionTopic(CreditPayment creditPayment) {
   
-  System.out.println(creditPayment);
-  
-  kafkaTemplate.send(creditPaymentTransactionTopic, creditPayment);
+    kafkaTemplate.send(creditPaymentTransactionTopic, creditPayment);
   
   }
   

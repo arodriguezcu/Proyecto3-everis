@@ -2,6 +2,9 @@ package com.everis.model;
 
 import lombok.Data;
 
+/**
+ * Clase Customer.
+ */
 @Data
 public class Customer {
 

@@ -4,7 +4,7 @@ import com.everis.model.Customer;
 import reactor.core.publisher.Mono;
 
 /**
- * Interface del Repositorio con metodos externos al crud.
+ * Interface de Metodos del Repositorio.
  */
 public interface InterfaceCustomerRepository extends InterfaceRepository<Customer, String> {
   

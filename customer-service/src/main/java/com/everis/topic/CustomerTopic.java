@@ -15,7 +15,7 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 /**
- * Configuracion del Topico.
+ * Clase Topico.
  */
 @Configuration
 public class CustomerTopic {
@@ -23,7 +23,7 @@ public class CustomerTopic {
   @Value("${spring.kafka.bootstrap-servers}")
   private String host;
     
-  /** Se crea el topico. */
+  /** Creacion del Topico. */
   @Bean
   public NewTopic topicCustomer() {
   
@@ -35,7 +35,7 @@ public class CustomerTopic {
     
   }
 
-  /** Se crea el topico. */
+  /** Creacion del Topico. */
   @Bean
   public ProducerFactory<String, Object> producerFactory() {
   
@@ -51,7 +51,7 @@ public class CustomerTopic {
   
   }
   
-  /** Se crea el topico. */
+  /** Creacion del Topico. */
   @Bean
   public KafkaTemplate<String, Object> kafkaTemplate() {
   

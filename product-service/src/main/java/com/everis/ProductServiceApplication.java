@@ -5,15 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
- * 
+ * Configuracion del Servicio y Eureka.
  */
 @SpringBootApplication
 @EnableEurekaClient
 public class ProductServiceApplication {
 
-  /**
-   * 
-   */
+  /** Principal. */
   public static void main(String[] args) {
   
     SpringApplication.run(ProductServiceApplication.class, args);

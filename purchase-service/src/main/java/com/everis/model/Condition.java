@@ -1,14 +1,16 @@
 package com.everis.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import java.util.List;
 import lombok.Data;
 
+/**
+ * Clase Condition.
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Condition {
+  
   private List<String> customerTypeTarget;
   
   private boolean hasMaintenanceFee;
@@ -20,15 +22,7 @@ public class Condition {
   private boolean hasDailyMonthlyTransactionLimit;
   private Integer dailyMonthlyTransactionLimit;
   
-//  private boolean hasDailyWithdrawalTransactionLimit;
-//  private Integer dailyWithdrawalTransactionLimit;
-//  
-//  private boolean hasDailyDepositTransactionLimit;
-//  private Integer dailyDepositTransactionLimit;
-  
-//  private Integer creditPerPersonLimit;
-//  private Integer creditPerBusinessLimit;
-  
   private Integer productPerPersonLimit;
   private Integer productPerBusinessLimit; 
+  
 }

@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
- * 
+ * Clase Product.
  */
 @Document(collection = "product")
 @JsonInclude(JsonInclude.Include.NON_NULL)

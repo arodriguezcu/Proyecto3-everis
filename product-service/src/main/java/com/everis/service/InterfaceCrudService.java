@@ -4,7 +4,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * 
+ * Interface de Metodos CRUD.
  */
 public interface InterfaceCrudService<T, K> {
   

@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Crud con genericos.
+ * Implementacion del CRUD. 
  */
 public abstract class CrudServiceImpl<T, K> implements InterfaceCrudService<T, K> {
   
@@ -33,10 +33,8 @@ public abstract class CrudServiceImpl<T, K> implements InterfaceCrudService<T, K
   }
 
   @Override
-  public Mono<Void> delete(K id) {
-    
-    return getRepository().deleteById(id);
-    
+  public Mono<Void> delete(K id) {    
+    return getRepository().deleteById(id);    
   }
 
 }

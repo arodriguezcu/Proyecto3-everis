@@ -7,10 +7,10 @@ services:
     build: .
     ports:
        - "8090:8090"
-    links:
-      - mongo
-  mongo:
-    container_name: customer-db
-    image: mongo
-    ports:
-      - "27020:27017"
+#    links:
+#      - mongo
+#  mongo:
+#    container_name: db_customer
+#    image: mongo
+#    ports:
+#      - "27020:27017"

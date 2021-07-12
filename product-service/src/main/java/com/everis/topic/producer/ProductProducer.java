@@ -4,11 +4,9 @@ import com.everis.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import reactor.core.Disposable;
-import reactor.core.publisher.Mono;
 
 /**
- * 
+ * Clase Producer del Product.
  */
 @Component
 public class ProductProducer {
@@ -18,12 +16,10 @@ public class ProductProducer {
   
   private String createdProductTopic = "saved-product-topic";
 
-  /**  */
-  public Disposable sendSavedProductTopic(Product data) {
+  /** Envia datos del product al topico. */
+  public void sendSavedProductTopic(Product product) {
   
-    return Mono.just(data)
-        .map(o -> kafkaTemplate.send(createdProductTopic, data))
-        .subscribe();
+    kafkaTemplate.send(createdProductTopic, product);
     
   }
   

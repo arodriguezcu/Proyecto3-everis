@@ -1,16 +1,16 @@
 package com.everis.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
-
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import lombok.Data;
-
+/**
+ * Clase CreditPayment.
+ */
 @Document(collection = "credit_consumer")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data

@@ -1,17 +1,19 @@
 package com.everis.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import lombok.Data;
-
+/**
+ * Clase Customer.
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Document(collection = "customer")
 @Data
 public class Customer {
+  
   @Id
   private String id;
 
@@ -32,4 +34,5 @@ public class Customer {
 
   @Field(name = "phoneNumber")
   private String phoneNumber;
+  
 }

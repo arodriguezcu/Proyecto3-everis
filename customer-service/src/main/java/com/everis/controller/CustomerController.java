@@ -18,76 +18,76 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
- * Controlador para manejar crud del cliente.
+ * Controlador del Customer.
  */
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
-  
+
   @Autowired
   private InterfaceCustomerService service;
-  
-  /** Listado de clientes. */
+
+  /** Metodo para listar todos los clientes. */
   @GetMapping
   public Mono<ResponseEntity<List<Customer>>> findAll() {
-    
+
     return service.findAllCustomer()
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
-  /** Buscar cliente por numero de identidad. */
-  @GetMapping("/{indentityNumber}")
-  public Mono<ResponseEntity<Customer>> findByIdentityNumber(@PathVariable("indentityNumber") 
-      String indentityNumber) {
-    
-    return service.findByIdentityNumber(indentityNumber)
+
+  /** Metodo para buscar cliente por numero de identidad. */
+  @GetMapping("/{identityNumber}")
+  public Mono<ResponseEntity<Customer>> findByIdentityNumber(@PathVariable("identityNumber") 
+      String identityNumber) {
+
+    return service.findByIdentityNumber(identityNumber)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-    
+
   }
-  
-  /** Crear cliente. */
+
+  /** Metodo para crear cliente. */
   @PostMapping
   public Mono<ResponseEntity<Customer>> create(@RequestBody Customer customer) {
-    
+
     return service.createCustomer(customer)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-    
+
   }
-  
-  /** Actualizar cliente por numero de identidad. */
-  @PutMapping("/{indentityNumber}")
+
+  /** Metodo para actualizar cliente por numero de identidad. */
+  @PutMapping("/{identityNumber}")
   public Mono<ResponseEntity<Customer>> update(@RequestBody 
-      Customer customer, @PathVariable("indentityNumber") String indentityNumber) {
-  
-    return service.updateCustomer(customer, indentityNumber)
+      Customer customer, @PathVariable("identityNumber") String identityNumber) {
+
+    return service.updateCustomer(customer, identityNumber)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
-  /** Eliminar cliente por numero de identidad. */
-  @DeleteMapping("/{indentityNumber}")
-  public Mono<ResponseEntity<Response>> delete(@PathVariable("indentityNumber") 
-      String indentityNumber) {
-    
-    return service.deleteCustomer(indentityNumber)
+
+  /** Metodo para eliminar cliente por numero de identidad. */
+  @DeleteMapping("/{identityNumber}")
+  public Mono<ResponseEntity<Response>> delete(@PathVariable("identityNumber") 
+      String identityNumber) {
+
+    return service.deleteCustomer(identityNumber)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-    
+
   }
-  
+
 }

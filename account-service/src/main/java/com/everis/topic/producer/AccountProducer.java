@@ -1,11 +1,13 @@
 package com.everis.topic.producer;
 
+import com.everis.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import com.everis.model.Account;
-
+/**
+ * Clase Productor del Account.
+ */
 @Component
 public class AccountProducer {
 
@@ -14,6 +16,7 @@ public class AccountProducer {
 
   private String createdAccountTopic = "created-account-topic";
   
+  /** Envia datos del account al topico. */
   public void sendCreatedAccount(Account account) {
   
     kafkaTemplate.send(createdAccountTopic, account);

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * Omitir campos que son nulos.
+ * Clase Response.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
