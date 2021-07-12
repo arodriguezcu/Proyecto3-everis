@@ -17,37 +17,37 @@ zuul:
     customer:
       path: /api/customer-service/**
       service-id: customer-service
-      url: lb://customer-service
+      url: http://localhost:8090/
     product:
       path: /api/product-service/**
       service-id: product-service
-      url: lb://product-service
+      url: http://localhost:8091/
     purchase:
       path: /api/purchase-service/**
       service-id: purchase-service
-      url: lb://purchase-service
+      url: http://localhost:8092/
     transaction:
       path: /api/transaction-service/**
       service-id: transaction-service
-      url: lb://transaction-service
+      url: http://localhost:8093/
     account:
       path: /api/account-service/**
       service-id: account-service
-      url: lb://account-service
+      url: http://localhost:8094/
     withdrawal:
       path: /api/withdrawal-service/**
       service-id: withdrawal-service
-      url: lb://withdrawal-service
+      url: http://localhost:8095/
     deposit:
       path: /api/deposit-service/**
       service-id: deposit-service
-      url: lb://deposit-service
+      url: http://localhost:8096/
     credit:
       path: /api/credit-service/**
       service-id: credit-service
-      url: lb://credit-service
+      url: http://localhost:8097/
     payment:
       path: /api/payment-service/**
       service-id: payment-service
-      url: lb://payment-service
+      url: http://localhost:8098/
         
