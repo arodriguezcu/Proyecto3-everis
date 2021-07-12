@@ -44,7 +44,8 @@ msg:
   error:
     registro:
       notfound.all: PURCHASES NO ENCONTRADOS
-      product.all: PRODUCTS NO ENCONTRADOS
+      product.all: PRODUCTOS NO ENCONTRADOS
+      customer.all: CLIENTE NO ENCONTRADO
       notfound: PURCHASE NO IDENTIFICADO      
       notfound.create: PURCHASE NO SE PUDO CREAR
       product.exists: PRODUCTO NO EXISTE
