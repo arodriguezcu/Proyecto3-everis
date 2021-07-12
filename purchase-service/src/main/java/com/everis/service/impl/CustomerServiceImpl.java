@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
  * Implementacion de los Metodos del Cliente.
  */
 @Service
-public class CustomerServiceImpl extends CrudServiceImpl<Customer, String> 
+public class CustomerServiceImpl extends CrudServiceImpl<Customer, String>
         implements InterfaceCustomerService {
 
   @Autowired
@@ -27,9 +27,9 @@ public class CustomerServiceImpl extends CrudServiceImpl<Customer, String>
 
   @Override
   public Mono<Customer> findByIdentityNumber(String identityNumber) {
-  
+
     return repository.findByIdentityNumber(identityNumber);
-  
+
   }
 
 }

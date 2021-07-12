@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
  * Implementacion de los Metodos del Producto.
  */
 @Service
-public class ProductServiceImpl extends CrudServiceImpl<Product, String> 
+public class ProductServiceImpl extends CrudServiceImpl<Product, String>
         implements InterfaceProductService {
 
   @Autowired
@@ -27,9 +27,9 @@ public class ProductServiceImpl extends CrudServiceImpl<Product, String>
 
   @Override
   public Mono<Product> findByProductName(String productName) {
-  
+
     return repository.findByProductName(productName);
-  
+
   }
 
 }

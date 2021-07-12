@@ -38,18 +38,18 @@ public class Purchase {
 
   @Field(name = "authorizedSigner")
   private List<Customer> authorizedSigner;
-  
+
   @Field(name = "amountIni")
   private double amountIni;
-  
+
   @Field(name = "amountFin")
   private double amountFin;
-  
+
   @Field(name = "cardNumber")
   private String cardNumber;
-  
+
   @Field(name = "purchaseDate")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime purchaseDate;
-  
+
 }

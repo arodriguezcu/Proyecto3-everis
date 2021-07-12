@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PurchaseProducer {
-  
+
   @Autowired
-  private KafkaTemplate<String, Object> kafkaTemplate;  
+  private KafkaTemplate<String, Object> kafkaTemplate;
 
   private String createdPurchaseTopic = "created-purchase-topic";
-  
+
   /** Envia datos del purchase al topico. */
   public void sendCreatePurchase(Purchase purchase) {
-  
+
     kafkaTemplate.send(createdPurchaseTopic, purchase);
-  
+
   }
-  
+
 }

@@ -13,9 +13,9 @@ public class PurchaseServiceApplication {
 
   /** Principal. */
   public static void main(String[] args) {
-  
+
     SpringApplication.run(PurchaseServiceApplication.class, args);
-    
+
   }
 
 }

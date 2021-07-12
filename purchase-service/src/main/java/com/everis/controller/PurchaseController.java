@@ -28,81 +28,81 @@ public class PurchaseController {
 
   @Autowired
   private InterfacePurchaseService service;
-    
+
   /** Metodo para listar todos los purchase. */
   @GetMapping
   public Mono<ResponseEntity<List<Purchase>>> findAll() {
-    
+
     return service.findAllPurchase()
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-      
+
   }
-  
+
   /** Metodo para listar todos los purchase por numero de identidad. */
   @GetMapping("/{identityNumber}")
-  public Mono<ResponseEntity<List<Purchase>>> findByIndentityNumber(@PathVariable("identityNumber") 
+  public Mono<ResponseEntity<List<Purchase>>> findByIndentityNumber(@PathVariable("identityNumber")
           String identityNumber) {
-    
+
     return service.findByIndentityNumber(identityNumber)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
+
   /** Metodo para listar todos los productos disponibles para el cliente. */
   @GetMapping("/available/{identityNumber}")
-  public Mono<ResponseEntity<List<Product>>> findByAvailableProduct(@PathVariable("identityNumber") 
+  public Mono<ResponseEntity<List<Product>>> findByAvailableProduct(@PathVariable("identityNumber")
           String identityNumber) {
-    
+
     return service.findByAvailableProduct(identityNumber)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
+
   /** Metodo para crear un purchase. */
   @PostMapping
   public Mono<ResponseEntity<Purchase>> create(@Valid @RequestBody Purchase purchase) {
-    
+
     return service.createPurchase(purchase)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-        
+
   }
-  
+
   /** Metodo para actualizar un purchase. */
   @PutMapping("/{id}")
-  public Mono<ResponseEntity<Purchase>> update(@RequestBody Purchase purchase, 
+  public Mono<ResponseEntity<Purchase>> update(@RequestBody Purchase purchase,
       @PathVariable("id") String id) {
-  
+
     return service.updatePurchase(purchase, id)
         .map(objectUpdated -> ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(objectUpdated)
             );
-  
+
   }
-  
+
   /** Metodo para eliminar un purchase. */
   @DeleteMapping("/{cardName}")
   public Mono<ResponseEntity<Response>> delete(@PathVariable("cardName") String cardNumber) {
-    
+
     return service.deletePurchase(cardNumber)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-      
+
   }   
-   
+
 }

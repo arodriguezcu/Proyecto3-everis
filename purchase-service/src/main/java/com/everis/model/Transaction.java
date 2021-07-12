@@ -28,5 +28,5 @@ public class Transaction {
 
   @Field(name = "description")
   private String description;
-  
+
 }
