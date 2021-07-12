@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CustomerProducer {
-  
+
   @Autowired
   private KafkaTemplate<String, Object> kafkaTemplate;
-  
+
   private String createdCustomerTopic = "saved-customer-topic";
 
   /** Envia datos del customer al topico. */
   public void sendSavedCustomerTopic(Customer customer) {
-  
+
     kafkaTemplate.send(createdCustomerTopic, customer);
-  
+
   }
-  
+
 }

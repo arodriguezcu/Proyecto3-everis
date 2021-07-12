@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
  * Interface de Metodos del Repositorio.
  */
 public interface InterfaceCustomerRepository extends InterfaceRepository<Customer, String> {
-  
+
   Mono<Customer> findByIdentityNumber(String identityNumber);
 
 }

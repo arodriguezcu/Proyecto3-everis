@@ -41,7 +41,7 @@ public class CustomerController {
 
   /** Metodo para buscar cliente por numero de identidad. */
   @GetMapping("/{identityNumber}")
-  public Mono<ResponseEntity<Customer>> findByIdentityNumber(@PathVariable("identityNumber") 
+  public Mono<ResponseEntity<Customer>> findByIdentityNumber(@PathVariable("identityNumber")
       String identityNumber) {
 
     return service.findByIdentityNumber(identityNumber)
@@ -66,7 +66,7 @@ public class CustomerController {
 
   /** Metodo para actualizar cliente por numero de identidad. */
   @PutMapping("/{identityNumber}")
-  public Mono<ResponseEntity<Customer>> update(@RequestBody 
+  public Mono<ResponseEntity<Customer>> update(@RequestBody
       Customer customer, @PathVariable("identityNumber") String identityNumber) {
 
     return service.updateCustomer(customer, identityNumber)
@@ -79,7 +79,7 @@ public class CustomerController {
 
   /** Metodo para eliminar cliente por numero de identidad. */
   @DeleteMapping("/{identityNumber}")
-  public Mono<ResponseEntity<Response>> delete(@PathVariable("identityNumber") 
+  public Mono<ResponseEntity<Response>> delete(@PathVariable("identityNumber")
       String identityNumber) {
 
     return service.deleteCustomer(identityNumber)
