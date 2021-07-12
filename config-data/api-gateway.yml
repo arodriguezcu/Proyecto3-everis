@@ -1,18 +1,15 @@
 server:
   port: 8080
-#  hostname: localhost
-#  hostname: 192.168.0.106
 
 eureka:
-  instance:
-    prefer-ip-address: true
-#    hostname: ${server.hostname}
   client:
     service-url:
-#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
-      defaultZone: https://docker-eureka-server.azurewebsites.net/
+      defaultZone: http://${eureka.instance.hostname}:80/eureka/
     register-with-eureka: true
     fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    hostname: az-eureka-server.azurewebsites.net
 
 #routers
 zuul:

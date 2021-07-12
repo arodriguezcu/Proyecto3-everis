@@ -8,31 +8,25 @@ spring:
   application:
     name: deposit-service
   data:
-    mongodb:    
-      uri: mongodb://mongo/db_deposit
+    mongodb:
+      uri: mongodb://${server.hostname}:12500/db_deposit
 #      uri: mongodb://arodriguezcu:WoZiG7Enr4sZXJsPA6J1yAICIAeGAzczurFJNm8k3q0apmZjMRPlAdHKqoA4vCnXvwLT40VxnskXjU6AwznsuA==@arodriguezcu.mongo.cosmos.azure.com:10255/db_deposit?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@arodriguezcu@
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 
 kafka:
   server:
-#    hostname: ${server.hostname}
     hostname: 20.94.153.173
     port: 9092
-#    port: 29092
-#    port: 80
 
 eureka:
   client:
     service-url:
-#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
-#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
       defaultZone: http://${eureka.instance.hostname}:80/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-#    hostname: ${server.hostname}
     hostname: az-eureka-server.azurewebsites.net
       
 topic:

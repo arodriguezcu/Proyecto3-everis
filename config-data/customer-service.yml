@@ -16,23 +16,17 @@ spring:
 
 kafka:
   server:
-#    hostname: ${server.hostname}
     hostname: 20.94.153.173
     port: 9092
-#    port: 29092
-#    port: 22181
 
 eureka:
   client:
     service-url:
-#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
-#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
       defaultZone: http://${eureka.instance.hostname}:80/eureka/
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-#    hostname: ${server.hostname}
     hostname: az-eureka-server.azurewebsites.net
 
 msg:
