@@ -23,70 +23,70 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-  
+
   @Autowired
   private InterfaceProductService service;
-  
+
   /** Metodo para listar todos los productos. */
-  @GetMapping  
-  public Mono<ResponseEntity<List<Product>>> findAll() { 
-    
+  @GetMapping
+  public Mono<ResponseEntity<List<Product>>> findAll() {
+
     return service.findAllProduct()
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
+
   /** Metodo para buscar producto por nombre. */
   @GetMapping("/{productName}")
-  public Mono<ResponseEntity<Product>> findByProductName(@PathVariable("productName") 
+  public Mono<ResponseEntity<Product>> findByProductName(@PathVariable("productName")
       String productName) {
-    
+
     return service.findByProductName(productName)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
+
   /** Metodo para crear producto. */
   @PostMapping
   public Mono<ResponseEntity<Product>> create(@RequestBody Product product) {
-        
+
     return service.createProduct(product)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
+
   /** Metodo para actualizar producto. */
   @PutMapping("/{productName}")
-  public Mono<ResponseEntity<Product>> update(@RequestBody 
+  public Mono<ResponseEntity<Product>> update(@RequestBody
       Product product, @PathVariable("productName") String productName) {
-    
+
     return service.updateProduct(product, productName)
         .map(objectFound -> ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(objectFound));
-  
+
   }
-  
+
   /** Metodo para eliminar producto por nombre. */
   @DeleteMapping("/{productName}")
   public Mono<ResponseEntity<Response>> delete(@PathVariable("productName") String productName) {
-    
+
     return service.deleteProduct(productName)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
+
 }

@@ -13,9 +13,9 @@ public class ProductServiceApplication {
 
   /** Principal. */
   public static void main(String[] args) {
-  
+
     SpringApplication.run(ProductServiceApplication.class, args);
-    
+
   }
 
 }

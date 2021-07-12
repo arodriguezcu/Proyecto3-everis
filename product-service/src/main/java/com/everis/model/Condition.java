@@ -10,19 +10,19 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Condition {
-  
+
   private List<String> customerTypeTarget;
-  
+
   private boolean hasMaintenanceFee;
   private Double maintenanceFee;
-  
+
   private boolean hasMonthlyTransactionLimit;
   private Integer monthlyTransactionLimit;
-  
+
   private boolean hasDailyMonthlyTransactionLimit;
   private Integer dailyMonthlyTransactionLimit;
-  
+
   private Integer productPerPersonLimit;
-  private Integer productPerBusinessLimit; 
-  
+  private Integer productPerBusinessLimit;
+
 }

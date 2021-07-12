@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
  * Interface de Metodos del Repositorio.
  */
 public interface InterfaceProductRepository extends InterfaceRepository<Product, String> {
-  
+
   Mono<Product> findByProductName(String productName);
 
 }
