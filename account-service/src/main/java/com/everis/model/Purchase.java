@@ -25,5 +25,5 @@ public class Purchase {
 
   @Field(name = "amountIni")
   private Double amountIni;
-  
+
 }

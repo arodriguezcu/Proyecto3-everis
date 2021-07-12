@@ -13,9 +13,9 @@ public class AccountServiceApplication {
 
   /** Principal. */
   public static void main(String[] args) {
-  
+
     SpringApplication.run(AccountServiceApplication.class, args);
-  
+
   }
 
 }

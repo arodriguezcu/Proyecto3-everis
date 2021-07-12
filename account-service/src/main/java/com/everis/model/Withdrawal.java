@@ -18,10 +18,10 @@ public class Withdrawal {
 
   @Id
   private String id;
-  
+
   @Field(name = "account")
   private Account account;
-  
+
   @Field(name = "amount")
   private Double amount;
 
@@ -31,5 +31,5 @@ public class Withdrawal {
   @Field(name = "withdrawalDate")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime withdrawalDate;
-  
+
 }

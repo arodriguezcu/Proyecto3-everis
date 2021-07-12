@@ -12,24 +12,24 @@ import reactor.core.publisher.Mono;
  * Implementacion de los Metodos del Purchase.
  */
 @Service
-public class PurchaseServiceImpl extends CrudServiceImpl<Purchase, String> 
+public class PurchaseServiceImpl extends CrudServiceImpl<Purchase, String>
     implements InterfacePurchaseService {
 
   @Autowired
   private InterfacePurchaseRepository repository;
-  
+
   @Override
   protected InterfaceRepository<Purchase, String> getRepository() {
-  
+
     return repository;
-  
+
   }
 
   @Override
   public Mono<Purchase> findByCardNumber(String cardNumber) {
-  
+
     return repository.findByCardNumber(cardNumber);
-  
+
   }
-  
+
 }

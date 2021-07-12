@@ -15,12 +15,12 @@ public class AccountProducer {
   private KafkaTemplate<String, Object> kafkaTemplate;
 
   private String createdAccountTopic = "created-account-topic";
-  
+
   /** Envia datos del account al topico. */
   public void sendCreatedAccount(Account account) {
-  
+
     kafkaTemplate.send(createdAccountTopic, account);
-    
+
   }
-  
+
 }

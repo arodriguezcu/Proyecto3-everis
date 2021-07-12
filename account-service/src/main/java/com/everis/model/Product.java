@@ -10,10 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class Product {
-    
+
   @Field(name = "productName")
   private String productName;
-  
+
   @Field(name = "productType")
   private String productType;
 

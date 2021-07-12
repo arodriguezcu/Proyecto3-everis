@@ -27,7 +27,7 @@ public class Transaction {
 
   @Field(name = "account")
   private Account account;
-  
+
   @Field(name = "purchase")
   private Purchase purchase;
 
@@ -37,5 +37,5 @@ public class Transaction {
   @Field(name = "transactionDate")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime transactionDate = LocalDateTime.now();
-  
+
 }

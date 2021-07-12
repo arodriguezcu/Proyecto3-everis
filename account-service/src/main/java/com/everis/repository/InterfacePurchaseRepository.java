@@ -9,5 +9,5 @@ import reactor.core.publisher.Mono;
 public interface InterfacePurchaseRepository extends InterfaceRepository<Purchase, String> {
 
   Mono<Purchase> findByCardNumber(String cardNumber);
-  
+
 }

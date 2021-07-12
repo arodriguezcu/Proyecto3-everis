@@ -24,22 +24,22 @@ public class Account {
 
   @Id
   private String id;
-  
+
   @Field(name = "accountNumber")
   private String accountNumber;
-  
+
   @Field(name = "dateOpened")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime dateOpened;
-  
+
   @Field(name = "dateClosed")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime dateClosed;
-  
+
   @Field(name = "purchase")
   private Purchase purchase;
-  
+
   @Field(name = "currentBalance")
   private double currentBalance;
-  
+
 }

@@ -23,71 +23,71 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/account")
 public class AccountController {
-  
+
   @Autowired
   private InterfaceAccountService service;
-  
+
   /** Metodo para listar cuentas. */
   @GetMapping
-  public Mono<ResponseEntity<List<Account>>> findAll() { 
-      
+  public Mono<ResponseEntity<List<Account>>> findAll() {
+
     return service.findAllAccount()
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-    
+
   }
-  
+
   /** Metodo para buscar cuenta por numero de cuenta. */
   @GetMapping("/{accountNumber}")
-  public Mono<ResponseEntity<Account>> findByAccountNumber(@PathVariable("accountNumber") 
+  public Mono<ResponseEntity<Account>> findByAccountNumber(@PathVariable("accountNumber")
       String accountNumber) {
-  
+
     return service.findByAccountNumber(accountNumber)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
+
   /** Metodo para crear una cuenta. */
   @PostMapping
   public Mono<ResponseEntity<Account>> create(@RequestBody Account account) {
-    
+
     return service.createAccount(account)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-  
+
   }
-  
+
   /** Metodo para actualizar una cuenta. */
   @PutMapping("/{id}")
-  public Mono<ResponseEntity<Account>> update(@RequestBody Account account, 
+  public Mono<ResponseEntity<Account>> update(@RequestBody Account account,
       @PathVariable("id") String id) {
-  
+
     return service.updateAccount(account, id)
         .map(objectUpdated -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectUpdated));
-    
+
   }
 
   /** Metodo para eliminar una cuenta. */
   @DeleteMapping("/{accountNumber}")
-  public Mono<ResponseEntity<Response>> delete(@PathVariable("accountNumber") 
+  public Mono<ResponseEntity<Response>> delete(@PathVariable("accountNumber")
       String accountNumber) {
-    
+
     return service.deleteAccount(accountNumber)
         .map(objectFound -> ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-    
+
   }
-  
+
 }
