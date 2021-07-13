@@ -7,10 +7,3 @@ services:
     build: .
     ports:
        - "8095:8095"
-#    links:
-#      - mongo
-#  mongo:
-#    container_name: db_withdrawal
-#    image: mongo
-#    ports:
-#      - "27025:27020"
