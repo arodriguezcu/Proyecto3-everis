@@ -6,7 +6,7 @@ server:
   
 spring:
   application:
-    name: purchase-service
+    name: micro-purchase
   data:
     mongodb:
 #      uri: mongodb://${server.hostname}:12500/db_purchase

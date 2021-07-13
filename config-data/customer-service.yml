@@ -6,7 +6,7 @@ server:
     
 spring:
   application:
-    name: customer-service
+    name: micro-customer
   data:
     mongodb:
 #      uri: mongodb://${server.hostname}:12500/db_customer

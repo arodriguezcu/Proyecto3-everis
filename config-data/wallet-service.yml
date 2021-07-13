@@ -1,16 +1,16 @@
 server:
-#  port: 8093
+#  port: 8099
   port: 80
 #  hostname: localhost
 #  hostname: 192.168.0.106
-  
+    
 spring:
   application:
-    name: micro-transaction
+    name: micro-wallet
   data:
     mongodb:
-#      uri: mongodb://${server.hostname}:12500/db_transaction
-      uri: mongodb://arodriguezcu:WoZiG7Enr4sZXJsPA6J1yAICIAeGAzczurFJNm8k3q0apmZjMRPlAdHKqoA4vCnXvwLT40VxnskXjU6AwznsuA==@arodriguezcu.mongo.cosmos.azure.com:10255/db_transaction?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@arodriguezcu@
+#      uri: mongodb://${server.hostname}:12500/db_wallet
+      uri: mongodb://arodriguezcu:WoZiG7Enr4sZXJsPA6J1yAICIAeGAzczurFJNm8k3q0apmZjMRPlAdHKqoA4vCnXvwLT40VxnskXjU6AwznsuA==@arodriguezcu.mongo.cosmos.azure.com:10255/db_wallet?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@arodriguezcu@
   kafka:
     bootstrap-servers: ${kafka.server.hostname}:${kafka.server.port}
 
@@ -32,12 +32,13 @@ eureka:
 msg:
   error:
     registro:
-      notfound.all: TRANSACCIONES NO IDENTIFICADAS
-      positive: MONTO DEBE SER POSITIVO
-      exceed: MONTO EXCEDE EL SALDO DISPONIBLE
-      accountini.exists: NUMERO DE CUENTA INICIAL NO EXISTE
-      accountfin.exists: NUMERO DE CUENTA FINAL NO EXISTE
-      card.exists: NUMERO DE TARJETA NO EXISTE
+      notfound.all: MONEDEROS NO ENCONTRADOS 
+      notfound: MONEDERO NO IDENTIFICADO
+      notfound.create: MONEDERO NO SE PUDO CREAR
+      if.exists: MONEDERO YA EXISTE
+      notfound.update: MONEDERO NO IDENTIFICADO PARA ACTUALIZAR
+      notfound.delete: MONEDERO NO IDENTIFICADO PARA ELIMINAR
+      wallet.delete: MONEDERO ELIMINADO
 
 resilience4j:
   circuitbreaker:
@@ -57,5 +58,5 @@ resilience4j:
           - java.io.IOException
           - java.net.ConnectException
     instances:
-      transactionServiceCircuitBreaker:
+      customerServiceCircuitBreaker:
         baseConfig: default

@@ -6,7 +6,7 @@ server:
   
 spring:
   application:
-    name: credit-consumer-service
+    name: micro-credit
   data:
     mongodb:
 #      uri: mongodb://${server.hostname}:12500/db_credit

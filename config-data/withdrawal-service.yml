@@ -6,7 +6,7 @@ server:
   
 spring:
   application:
-    name: withdrawal-service
+    name: micro-withdrawal
   data:
     mongodb:
 #      uri: mongodb://${server.hostname}:12500/db_withdrawal
