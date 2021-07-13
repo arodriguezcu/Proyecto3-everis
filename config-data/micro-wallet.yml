@@ -1,6 +1,6 @@
 server:
-#  port: 8099
-  port: 80
+  port: 8099
+#  port: 80
 #  hostname: localhost
 #  hostname: 192.168.0.106
     
@@ -16,7 +16,7 @@ spring:
 
 kafka:
   server:
-    hostname: 20.94.153.173
+    hostname: 20.94.188.219
     port: 9092
 
 eureka:

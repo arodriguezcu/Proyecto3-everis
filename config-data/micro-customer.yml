@@ -16,11 +16,8 @@ spring:
 
 kafka:
   server:
-#    hostname: 20.94.153.173
     hostname: 20.94.188.219
-#    hostname: 52.185.98.223
     port: 9092
-#    port: 80
 
 eureka:
   client:
