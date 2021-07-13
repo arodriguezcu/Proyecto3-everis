@@ -1,7 +1,7 @@
 server:
-#  port: 8092
-  port: 80
-#  hostname: localhost
+  port: 8092
+#  port: 80
+  hostname: localhost
 #  hostname: 192.168.0.106
   
 spring:
