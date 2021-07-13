@@ -225,7 +225,7 @@ public class AccountServiceImpl extends CrudServiceImpl<Account, String>
   /** Mensaje si falla el update. */  
   public Mono<Account> updateFallback(Account account, String accountNumber, Exception ex) { 
 
-    log.info("Cuenta {} no encontrada para actualizar.", accountNumber);
+    log.info("Cuenta {} no encontrada para actualizar.", account.getAccountNumber());
 
     return Mono.just(Account
         .builder()

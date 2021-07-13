@@ -6,6 +6,7 @@ import com.everis.model.Transaction;
 import com.everis.service.InterfaceAccountService;
 import com.everis.service.InterfacePurchaseService;
 import com.everis.topic.producer.AccountProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -33,7 +34,7 @@ public class AccountConsumer {
 
   /** Consume del topico purchase. */
   @KafkaListener(topics = "created-purchase-topic", groupId = "account-group")
-  public Disposable retrieveCreatedPurchase(String data) throws Exception {
+  public Disposable retrieveCreatedPurchase(String data) throws JsonProcessingException {
 
     Purchase purchase = objectMapper.readValue(data, Purchase.class);
 
@@ -52,7 +53,7 @@ public class AccountConsumer {
 
   /** Consume del topico transaction. */
   @KafkaListener(topics = "created-transaction-topic", groupId = "account-group")
-  public Disposable retrieveCreatedTransaction(String data) throws Exception {
+  public Disposable retrieveCreatedTransaction(String data) throws JsonProcessingException {
 
     Transaction transaction = objectMapper.readValue(data, Transaction.class);
 

@@ -2,5 +2,5 @@ projectKey=MicroProduct
 serverUrl=http://localhost:9000
 serverVersion=8.9.1.44547
 dashboardUrl=http://localhost:9000/dashboard?id=MicroProduct
-ceTaskId=AXqbNlkOLt0wrnmQJC4Q
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AXqbNlkOLt0wrnmQJC4Q
+ceTaskId=AXqdg3XJLt0wrnmQJC8m
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXqdg3XJLt0wrnmQJC8m

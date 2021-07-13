@@ -7,6 +7,7 @@ import com.everis.service.InterfaceAccountService;
 import com.everis.service.InterfaceDepositService;
 import com.everis.service.InterfacePurchaseService;
 import com.everis.topic.producer.DepositProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -36,7 +37,7 @@ public class DepositConsumer {
   
   /** Consume del topico account. */
   @KafkaListener(topics = "created-account-topic", groupId = "deposit-group")
-  public Disposable retrieveCreatedAccount(String data) throws Exception {
+  public Disposable retrieveCreatedAccount(String data) throws JsonProcessingException {
   
     Account account = objectMapper.readValue(data, Account.class);
       
@@ -49,7 +50,7 @@ public class DepositConsumer {
   
   /** Consume del topico purchase. */
   @KafkaListener(topics = "created-purchase-topic", groupId = "deposit-group")
-  public Disposable retrieveCreatedPurchase(String data) throws Exception {
+  public Disposable retrieveCreatedPurchase(String data) throws JsonProcessingException {
   
     Purchase purchase = objectMapper.readValue(data, Purchase.class);
     
@@ -68,7 +69,7 @@ public class DepositConsumer {
   
   /** Consume del topico transaction. */
   @KafkaListener(topics = "created-transfer-deposit-topic", groupId = "deposit-group")
-  public Disposable retrieveCreatedDeposit(String data) throws Exception {
+  public Disposable retrieveCreatedDeposit(String data) throws JsonProcessingException {
   
     Deposit deposit = objectMapper.readValue(data, Deposit.class);
     

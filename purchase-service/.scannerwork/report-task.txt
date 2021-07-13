@@ -2,5 +2,5 @@ projectKey=MicroPurchase
 serverUrl=http://localhost:9000
 serverVersion=8.9.1.44547
 dashboardUrl=http://localhost:9000/dashboard?id=MicroPurchase
-ceTaskId=AXqbi0vVLt0wrnmQJC5q
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AXqbi0vVLt0wrnmQJC5q
+ceTaskId=AXqdg56xLt0wrnmQJC8n
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXqdg56xLt0wrnmQJC8n

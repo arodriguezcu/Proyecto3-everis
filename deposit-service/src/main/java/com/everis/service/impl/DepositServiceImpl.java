@@ -28,22 +28,22 @@ import reactor.core.publisher.Mono;
 public class DepositServiceImpl extends CrudServiceImpl<Deposit, String> 
     implements InterfaceDepositService {
 
-  private final String circuitBreaker = "depositServiceCircuitBreaker";
+  static final String CIRCUIT = "depositServiceCircuitBreaker";
 
   @Value("${msg.error.registro.notfound.all}")
-  public String msgNotFoundAll;
+  private String msgNotFoundAll;
   
   @Value("${msg.error.registro.positive}")
-  public String msgPositive;
+  private String msgPositive;
   
   @Value("${msg.error.registro.account.exists}")
-  public String msgAccountNotExists;
+  private String msgAccountNotExists;
   
   @Value("${msg.error.registro.card.exists}")
-  public String msgCardNotExists;
+  private String msgCardNotExists;
   
   @Value("${msg.error.registro.notfound.create}")
-  public String msgNotFoundCreate;
+  private String msgNotFoundCreate;
   
   @Autowired
   private InterfaceDepositRepository repository;
@@ -68,7 +68,7 @@ public class DepositServiceImpl extends CrudServiceImpl<Deposit, String>
   }
   
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "findAllFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "findAllFallback")
   public Mono<List<Deposit>> findAllDeposit() {
     
     Flux<Deposit> depositDatabase = service.findAll()
@@ -79,7 +79,7 @@ public class DepositServiceImpl extends CrudServiceImpl<Deposit, String>
   }
 
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "createFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "createFallback")
   public Mono<Deposit> createDeposit(Deposit deposit) {
     
     Mono<Purchase> purchaseDatabase = purchaseService
@@ -91,43 +91,35 @@ public class DepositServiceImpl extends CrudServiceImpl<Deposit, String>
         .switchIfEmpty(Mono.error(new RuntimeException(msgAccountNotExists)));
     
     return purchaseDatabase
-        .flatMap(purchase -> {
-          
-          return accountDatabase
-              .flatMap(account -> {
-          
-                if (deposit.getAmount() < 0) {
+        .flatMap(purchase -> accountDatabase
+            .flatMap(account -> {
+                          
+              if (deposit.getAmount() < 0) {
                 
-                  return Mono.error(new RuntimeException(msgPositive));
+                return Mono.error(new RuntimeException(msgPositive));
+            
+              }
+            
+              account.setCurrentBalance(account.getCurrentBalance() + deposit.getAmount());
+              deposit.setAccount(account);        
+              deposit.setPurchase(purchase);
+              deposit.setDepositDate(LocalDateTime.now());
+            
+              producer.sendDepositAccountTopic(deposit); 
               
-                }
-            
-                account.setCurrentBalance(account.getCurrentBalance() + deposit.getAmount());
-                deposit.setAccount(account);        
-                deposit.setPurchase(purchase);
-                deposit.setDepositDate(LocalDateTime.now());
-            
-                producer.sendDepositAccountTopic(deposit); 
+              if (purchase.getProduct().getCondition().getMonthlyTransactionLimit() > 0) {
                 
-                if (purchase.getProduct().getCondition().getMonthlyTransactionLimit() > 0) {
-                  
-                  deposit.getPurchase().getProduct().getCondition().setMonthlyTransactionLimit(
-                      purchase.getProduct().getCondition().getMonthlyTransactionLimit() - 1
-                  );
-                  
-                } 
-          
-                return service.create(deposit)
-                  .map(createdObject -> {
-                    
-                    return createdObject;
-                    
-                  })
-                  .switchIfEmpty(Mono.error(new RuntimeException(msgNotFoundCreate)));
-                      
-              });
-              
-        });
+                deposit.getPurchase().getProduct().getCondition().setMonthlyTransactionLimit(
+                    purchase.getProduct().getCondition().getMonthlyTransactionLimit() - 1
+                );
+                
+              } 
+        
+              return service.create(deposit)
+                .map(createdObject -> createdObject)
+                .switchIfEmpty(Mono.error(new RuntimeException(msgNotFoundCreate)));
+                             
+            }));
     
   }
   

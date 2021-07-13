@@ -28,25 +28,25 @@ import reactor.core.publisher.Mono;
 public class WithdrawalServiceImpl extends CrudServiceImpl<Withdrawal, String> 
     implements InterfaceWithdrawalService {
 
-  private final String circuitBreaker = "withdrawalServiceCircuitBreaker";
+  static final String CIRCUIT = "withdrawalServiceCircuitBreaker";
   
   @Value("${msg.error.registro.notfound.all}")
-  public String msgNotFoundAll;
+  private String msgNotFoundAll;
   
   @Value("${msg.error.registro.positive}")
-  public String msgPositive;
+  private String msgPositive;
   
   @Value("${msg.error.registro.exceed}")
-  public String msgExceed;
+  private String msgExceed;
   
   @Value("${msg.error.registro.account.exists}")
-  public String msgAccountNotExists;
+  private String msgAccountNotExists;
   
   @Value("${msg.error.registro.card.exists}")
-  public String msgCardNotExists;
+  private String msgCardNotExists;
   
   @Value("${msg.error.registro.notfound.create}")
-  public String msgNotFoundCreate;
+  private String msgNotFoundCreate;
   
   @Autowired
   private InterfaceWithdrawalRepository repository;
@@ -71,7 +71,7 @@ public class WithdrawalServiceImpl extends CrudServiceImpl<Withdrawal, String>
   }
   
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "findAllFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "findAllFallback")
   public Mono<List<Withdrawal>> findAllWithdrawal() {
     
     Flux<Withdrawal> withdrawalDatabase = service.findAll()
@@ -82,7 +82,7 @@ public class WithdrawalServiceImpl extends CrudServiceImpl<Withdrawal, String>
   }
   
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "createFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "createFallback")
   public Mono<Withdrawal> createWithdrawal(Withdrawal withdrawal) {
     
     Mono<Purchase> purchaseDatabase = purchaseService
@@ -95,15 +95,15 @@ public class WithdrawalServiceImpl extends CrudServiceImpl<Withdrawal, String>
     
     return purchaseDatabase
         .flatMap(purchase -> {
+          
+          if (withdrawal.getAmount() < 0) {
+            
+            return Mono.error(new RuntimeException(msgPositive));
+            
+          }
         
           return accountDatabase
               .flatMap(account -> {
-            
-                if (withdrawal.getAmount() < 0) {
-                  
-                  return Mono.error(new RuntimeException(msgPositive));
-                  
-                }
                 
                 if (withdrawal.getAmount() > account.getCurrentBalance()) {
                   
@@ -127,11 +127,7 @@ public class WithdrawalServiceImpl extends CrudServiceImpl<Withdrawal, String>
                 } 
               
                 return service.create(withdrawal)
-                    .map(createdObject -> {
-                        
-                      return createdObject;
-                                      
-                    })
+                    .map(createdObject -> createdObject)
                     .switchIfEmpty(Mono.error(new RuntimeException(msgNotFoundCreate)));
                           
               });

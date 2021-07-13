@@ -9,6 +9,7 @@ import com.everis.model.Withdrawal;
 import com.everis.service.InterfaceAccountService;
 import com.everis.service.InterfaceTransactionService;
 import com.everis.topic.producer.TransactionProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class TransactionConsumer {
 
   /** Consume del topico account. */
   @KafkaListener(topics = "created-account-topic", groupId = "transaction-group")
-  public Disposable retrieveCreatedAccount(String data) throws Exception {
+  public Disposable retrieveCreatedAccount(String data) throws JsonProcessingException {
   
     Account account = objectMapper.readValue(data, Account.class);
     
@@ -50,7 +51,7 @@ public class TransactionConsumer {
 
   /** Consume del topico withdrawal. */
   @KafkaListener(topics = "created-withdrawal-topic", groupId = "transaction-group")
-  public Disposable retrieveCreatedWithdrawal(String data) throws Exception {
+  public Disposable retrieveCreatedWithdrawal(String data) throws JsonProcessingException {
   
     Withdrawal withdrawal = objectMapper.readValue(data, Withdrawal.class);
   
@@ -97,8 +98,10 @@ public class TransactionConsumer {
         
       })
       .flatMap(a -> {
+        
         producer.sendCreatedTransactionTopic(a);
         return Mono.just(a);
+        
       })
       .subscribe();
   
@@ -106,7 +109,7 @@ public class TransactionConsumer {
 
   /** Consume del topico deposit. */
   @KafkaListener(topics = "created-deposit-topic", groupId = "transaction-group")
-  public Disposable retrieveCreatedDeposit(String data) throws Exception {
+  public Disposable retrieveCreatedDeposit(String data) throws JsonProcessingException {
   
     Deposit deposit = objectMapper.readValue(data, Deposit.class);
     
@@ -164,26 +167,26 @@ public class TransactionConsumer {
 
   /** Consume del topico credit-consumer. */
   @KafkaListener(topics = "created-credit-consumer-topic", groupId = "transaction-group")
-  public Disposable retrieveCreatedCreditConsumer(String data) throws Exception {
+  public Disposable retrieveCreatedCreditConsumer(String data) throws JsonProcessingException {
   
     CreditConsumer creditConsumer = objectMapper.readValue(data, CreditConsumer.class);
     
     return Mono.just(creditConsumer)
-      .map(c -> {
-        return transactionService
+      .map(c -> transactionService
           .create(Transaction
-            .builder()
-            .purchase(c.getPurchase())
-            .description(c.getDescription())
-            .transactionType("CONSUMO TARJETA CREDITO")
-            .transactionAmount(c.getAmount())
-            .transactionDate(c.getConsumDate())
-            .build())
-          .block();
-      })
+              .builder()
+              .purchase(c.getPurchase())
+              .description(c.getDescription())
+              .transactionType("CONSUMO TARJETA CREDITO")
+              .transactionAmount(c.getAmount())
+              .transactionDate(c.getConsumDate())
+              .build())
+          .block())
       .flatMap(a -> {
+        
         producer.sendCreatedTransactionTopic(a);
         return Mono.just(a);
+        
       })
       .subscribe();
   
@@ -191,26 +194,26 @@ public class TransactionConsumer {
 
   /** Consume del topico credit-payment. */
   @KafkaListener(topics = "created-credit-payment-topic", groupId = "transaction-group")
-  public Disposable retrieveCreatedCreditPayment(String data) throws Exception {
+  public Disposable retrieveCreatedCreditPayment(String data) throws JsonProcessingException {
   
     CreditPayment creditPayment = objectMapper.readValue(data, CreditPayment.class);
     
     return Mono.just(creditPayment)
-      .map(p -> {
-        return transactionService
+      .map(p -> transactionService
           .create(Transaction
-            .builder()
-            .purchase(p.getPurchase())
-            .description(p.getDescription())
-            .transactionType("PAGO TARJETA CREDITO")
-            .transactionAmount(p.getAmount())
-            .transactionDate(p.getPaymentDate())
-            .build())
-          .block();
-      })
+              .builder()
+              .purchase(p.getPurchase())
+              .description(p.getDescription())
+              .transactionType("PAGO TARJETA CREDITO")
+              .transactionAmount(p.getAmount())
+              .transactionDate(p.getPaymentDate())
+              .build())
+          .block())
       .flatMap(a -> {
+        
         producer.sendCreatedTransactionTopic(a);
         return Mono.just(a);
+        
       })
       .subscribe();
   

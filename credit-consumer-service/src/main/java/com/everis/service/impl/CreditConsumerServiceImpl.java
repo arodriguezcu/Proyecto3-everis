@@ -26,22 +26,22 @@ import reactor.core.publisher.Mono;
 public class CreditConsumerServiceImpl extends CrudServiceImpl<CreditConsumer, String> 
     implements InterfaceCreditConsumerService {
 
-  private final String circuitBreaker = "creditConsumerServiceCircuitBreaker";
+  static final String CIRCUIT = "creditConsumerServiceCircuitBreaker";
   
   @Value("${msg.error.registro.notfound.all}")
   private String msgNotFoundAll;
   
   @Value("${msg.error.registro.card.exists}")
-  public String msgCardNotExists;
+  private String msgCardNotExists;
   
   @Value("${msg.error.registro.positive}")
-  public String msgPositive;
+  private String msgPositive;
   
   @Value("${msg.error.registro.exceed}")
-  public String msgExceed;
+  private String msgExceed;
   
   @Value("${msg.error.registro.notfound.create}")
-  public String msgNotFoundCreate;
+  private String msgNotFoundCreate;
   
   @Autowired
   private InterfaceCreditConsumerRepository repository;
@@ -63,7 +63,7 @@ public class CreditConsumerServiceImpl extends CrudServiceImpl<CreditConsumer, S
   }
   
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "findAllFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "findAllFallback")
   public Mono<List<CreditConsumer>> findAllCredit() {
     
     Flux<CreditConsumer> creditDatabase = service.findAll()
@@ -74,7 +74,7 @@ public class CreditConsumerServiceImpl extends CrudServiceImpl<CreditConsumer, S
   }
 
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "createFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "createFallback")
   public Mono<CreditConsumer> createCredit(CreditConsumer creditConsumer) {
     
     Mono<Purchase> purchaseDatabase = purchaseService

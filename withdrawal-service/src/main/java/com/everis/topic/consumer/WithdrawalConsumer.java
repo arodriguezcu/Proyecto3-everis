@@ -7,6 +7,7 @@ import com.everis.service.InterfaceAccountService;
 import com.everis.service.InterfacePurchaseService;
 import com.everis.service.InterfaceWithdrawalService;
 import com.everis.topic.producer.WithdrawalProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -36,7 +37,7 @@ public class WithdrawalConsumer {
   
   /** Consume del topico account. */
   @KafkaListener(topics = "created-account-topic", groupId = "withdrawal-group")
-  public Disposable retrieveCreatedAccount(String data) throws Exception {
+  public Disposable retrieveCreatedAccount(String data) throws JsonProcessingException {
   
     Account account = objectMapper.readValue(data, Account.class);
       
@@ -49,7 +50,7 @@ public class WithdrawalConsumer {
   
   /** Consume del topico purchase. */
   @KafkaListener(topics = "created-purchase-topic", groupId = "withdrawal-group")
-  public Disposable retrieveCreatedPurchase(String data) throws Exception {
+  public Disposable retrieveCreatedPurchase(String data) throws JsonProcessingException {
   
     Purchase purchase = objectMapper.readValue(data, Purchase.class);
     
@@ -68,7 +69,7 @@ public class WithdrawalConsumer {
   
   /** Consume del topico transaction. */
   @KafkaListener(topics = "created-transfer-withdrawal-topic", groupId = "withdrawal-group")
-  public Disposable retrieveCreatedWithdrawal(String data) throws Exception {
+  public Disposable retrieveCreatedWithdrawal(String data) throws JsonProcessingException {
   
     Withdrawal withdrawal = objectMapper.readValue(data, Withdrawal.class);
   

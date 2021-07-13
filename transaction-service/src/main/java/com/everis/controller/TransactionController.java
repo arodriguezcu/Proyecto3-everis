@@ -1,6 +1,5 @@
 package com.everis.controller;
 
-import com.everis.dto.Response;
 import com.everis.model.Transaction;
 import com.everis.model.Transfer;
 import com.everis.model.Withdrawal;
@@ -66,36 +65,6 @@ public class TransactionController {
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(objectFound));
-    
-  }
-  
-  /** Consultar el saldo de la cuenta principal asociada a la tarjeta de débito. */
-  @GetMapping("current-balance/{cardNumber}")
-  public Mono<Object> currentBalance(@PathVariable("cardNumber") String cardNumber) { 
-      
-    return service.findAll().filter(list -> list.getPurchase().getCardNumber().equals(cardNumber))
-        .takeLast(1)
-        .collectList()
-        .flatMap(list -> {
-        
-          return list.size() > 0 
-              ?
-                  Mono.just(ResponseEntity
-                      .ok()
-                      .contentType(MediaType.APPLICATION_JSON)
-                      .body(Response
-                          .builder()
-                          .data(list)
-                          .build()))
-              :
-                  Mono.just(ResponseEntity
-                      .badRequest()
-                      .body(Response
-                          .builder()
-                          .error("El numero de tarjeta " + cardNumber + " no existe.")
-                          .build()));
-                
-        });
     
   }
   

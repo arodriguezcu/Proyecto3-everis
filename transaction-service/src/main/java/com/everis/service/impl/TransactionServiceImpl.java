@@ -24,13 +24,13 @@ import reactor.core.publisher.Mono;
 public class TransactionServiceImpl extends CrudServiceImpl<Transaction, String> 
     implements InterfaceTransactionService {
 
-  private final String circuitBreaker = "transactionServiceCircuitBreaker";
+  static final String CIRCUIT = "transactionServiceCircuitBreaker";
   
   @Value("${msg.error.registro.notfound.all}")
-  public String msgNotFoundAll;
+  private String msgNotFoundAll;
   
   @Value("${msg.error.registro.card.exists}")
-  public String msgCardNotExists;
+  private String msgCardNotExists;
   
   @Autowired
   private InterfaceTransactionRepository repository;
@@ -49,7 +49,7 @@ public class TransactionServiceImpl extends CrudServiceImpl<Transaction, String>
   }
   
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "findAllFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "findAllFallback")
   public Mono<List<Transaction>> findAllTransaction() { 
     
     Flux<Transaction> transactionDatabase = service.findAll()
@@ -60,7 +60,7 @@ public class TransactionServiceImpl extends CrudServiceImpl<Transaction, String>
   }
 
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "findAllCardFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "findAllCardFallback")
   public Mono<List<Transaction>> findAllByCardNumber(String cardNumber) { 
     
     Flux<Account> accountDatabase = accountService.findAll()
@@ -77,7 +77,7 @@ public class TransactionServiceImpl extends CrudServiceImpl<Transaction, String>
   }
 
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "findAllCardFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "findAllCardFallback")
   public Mono<List<Transaction>> findTop10ByCardNumber(String cardNumber) {
     
     Flux<Account> accountDatabase = accountService.findAll()
@@ -95,7 +95,7 @@ public class TransactionServiceImpl extends CrudServiceImpl<Transaction, String>
   }
 
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "findAllCardFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "findAllCardFallback")
   public Mono<List<Transaction>> findAllByCommission(String cardNumber) { 
     
     Flux<Account> accountDatabase = accountService.findAll()

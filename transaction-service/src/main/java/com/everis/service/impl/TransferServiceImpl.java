@@ -24,19 +24,19 @@ import reactor.core.publisher.Mono;
 public class TransferServiceImpl extends CrudServiceImpl<Transfer, String> 
     implements InterfaceTransferService {
 
-  private final String circuitBreaker = "transferServiceCircuitBreaker";
+  static final String CIRCUIT = "transferServiceCircuitBreaker";
 
   @Value("${msg.error.registro.accountini.exists}")
-  public String msgAccountIniNotExists;
+  private String msgAccountIniNotExists;
 
   @Value("${msg.error.registro.accountfin.exists}")
-  public String msgAccountFinNotExists;
+  private String msgAccountFinNotExists;
   
   @Value("${msg.error.registro.positive}")
-  public String msgPositive;
+  private String msgPositive;
   
   @Value("${msg.error.registro.exceed}")
-  public String msgExceed;
+  private String msgExceed;
   
   @Autowired
   private InterfaceTransferRepository repository;
@@ -55,7 +55,7 @@ public class TransferServiceImpl extends CrudServiceImpl<Transfer, String>
   }
 
   @Override
-  @CircuitBreaker(name = circuitBreaker, fallbackMethod = "createFallback")
+  @CircuitBreaker(name = CIRCUIT, fallbackMethod = "createFallback")
   public Mono<Withdrawal> createTransfer(Transfer transfer) {
     
     Mono<Account> sendAccount = accountService
@@ -73,14 +73,14 @@ public class TransferServiceImpl extends CrudServiceImpl<Transfer, String>
     return sendAccount
         .flatMap(send -> {
           
+          if (transfer.getAmount() < 0) {
+            
+            return Mono.error(new RuntimeException(msgPositive));
+            
+          }
+          
           return receiveAccount
-              .flatMap(receive -> {
-                
-                if (transfer.getAmount() < 0) {
-                  
-                  return Mono.error(new RuntimeException(msgPositive));
-                  
-                }
+              .flatMap(receive -> {                
                         
                 withdrawal.setAccount(receive);
                 withdrawal.getAccount().setCurrentBalance(receive.getCurrentBalance() 
